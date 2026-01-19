@@ -1,3 +1,5 @@
-export default function HomePage() {
-  return <h1>Testing</h1>
+import HeaderComponent from "../components/header";
+
+export default async function HomePage() {
+  return <HeaderComponent/>
 }

@@ -18,8 +18,13 @@ export class PostService implements PostRepository {
     const posts = this.readFromDisk();
     return posts;
   }
+
+  async findById(id: string): Promise<PostModel> {
+    const posts = await this.findAll();
+    const post = posts.find((post) => post.id === id);
+    if (!post) throw new Error("Post não encontrado");
+    return post;
+  }
 }
 
-export const postService = new PostService();
-
-postService.findAll().then((jsonContent) => console.log(jsonContent));
+export const postService: PostRepository = new PostService();

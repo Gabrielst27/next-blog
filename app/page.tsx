@@ -3,23 +3,12 @@ import PostsListComponent from "../components/posts-list";
 import { Suspense } from "react";
 import { SpinnerComponent } from "../components/spinner";
 import { ContainerComponent } from "../components/container";
+import HeaderComponent from "../components/header";
 
 export default async function HomePage() {
   return (
     <ContainerComponent>
-      <header
-        className={clsx(
-          "font-extrabold",
-          "flex",
-          "justify-center",
-          "items-center",
-          "p-8",
-          "text-3xl",
-          "text-center",
-        )}
-      >
-        AQUI É O HEADER
-      </header>
+      <HeaderComponent />
       <Suspense fallback={<SpinnerComponent />}>
         <PostsListComponent />
       </Suspense>

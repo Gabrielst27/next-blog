@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function HeaderComponent() {
   return (
-    <header>
+    <header className="border-b mt-4 mb-10">
       <h1
         className={clsx(
           'font-extrabold p-8 text-4xl/tight text-center',
@@ -13,14 +13,7 @@ export default function HeaderComponent() {
         )}
       >
         <Link className="w-full h-full" href="#">
-          <h1
-            className={clsx(
-              'hover:text-[38px] overflow-hidden',
-              'sm:hover:text-[62px]',
-            )}
-          >
-            Next Blog
-          </h1>
+          <h1>Next Blog</h1>
         </Link>
       </h1>
     </header>

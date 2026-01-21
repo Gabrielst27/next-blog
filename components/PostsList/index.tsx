@@ -1,7 +1,11 @@
 import clsx from 'clsx';
 import { postService } from '../../repositories/post/post.service';
-import { PostCoverImageComponent } from '../post-cover-image';
-import { PostHeadingComponent } from '../post-heading';
+import { PostCoverImageComponent } from '../PostCoverImage';
+import { PostHeadingComponent } from '../PostHeading';
+import {
+  formatDatetime,
+  formatRelativeDate,
+} from '../../utils/format-datetime';
 
 export default async function PostsListComponent() {
   const posts = await postService.findAll();
@@ -35,8 +39,8 @@ export default async function PostsListComponent() {
               }}
             />
             <div className="flex flex-col gap-2">
-              <time className="text-slate-500" dateTime="21/01/2025 15:26">
-                21/01/2026 15:26
+              <time className="text-slate-500" dateTime={post.updatedAt}>
+                {formatDatetime(post.updatedAt)}
               </time>
               <PostHeadingComponent url={postLink}>
                 <p>{post.title}</p>

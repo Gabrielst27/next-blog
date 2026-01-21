@@ -1,11 +1,17 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../post-cover-image';
-import { PostHeadingComponent } from '../post-heading';
+import { PostCoverImageComponent } from '../PostCoverImage';
+import { PostHeadingComponent } from '../PostHeading';
 
 export function FeaturedPost() {
   return (
     <section className="grid grid-cols-1 gap-6">
-      <h1 className={clsx('text-3xl font-bold text-center', 'sm:text-4xl')}>
+      <h1
+        className={clsx(
+          'text-2xl font-bold text-center',
+          'sm:text-3xl',
+          'md:text-4xl',
+        )}
+      >
         Em destaque:
       </h1>
       <div
@@ -28,7 +34,7 @@ export function FeaturedPost() {
         />
 
         <div className={clsx('flex flex-col gap-2 justify-center')}>
-          <time className="text-slate-600 text-sm/tight" dateTime="2025-01-20">
+          <time className="text-slate-500 text-sm/tight" dateTime="2025-01-20">
             20/01/2026 19:32
           </time>
 

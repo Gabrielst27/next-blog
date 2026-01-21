@@ -1,23 +1,33 @@
-import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
+import clsx from 'clsx';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export function PostCoverImageComponent() {
+type PostCoverImageProps = {
+  imageProps: React.ComponentProps<typeof Image>;
+  linkProps: React.ComponentProps<typeof Link>;
+};
+
+export function PostCoverImageComponent({
+  imageProps,
+  linkProps,
+}: PostCoverImageProps) {
   return (
     <Link
-      className={clsx("w-full h-full overflow-hidden rounded-2xl")}
-      href="#"
+      {...linkProps}
+      className={clsx(
+        'w-full h-full',
+        'overflow-hidden',
+        'rounded-2xl',
+        linkProps.className,
+      )}
     >
       <Image
+        {...imageProps}
         className={clsx(
-          "w-full h-full object-center",
-          "group-hover:scale-105 transition duration-300",
+          'w-full h-full object-center',
+          'group-hover:scale-105 transition duration-300',
+          imageProps.className,
         )}
-        src="/images/bryen_0.png"
-        width={1200}
-        height={720}
-        alt="Título do post"
-        priority
       ></Image>
     </Link>
   );

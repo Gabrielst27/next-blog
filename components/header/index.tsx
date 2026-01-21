@@ -1,22 +1,21 @@
-"use client";
-
-import clsx from "clsx";
+import clsx from 'clsx';
+import Link from 'next/link';
 
 export default function HeaderComponent() {
   return (
-    <h1
-      className={clsx(
-        "text-xl font-bold",
-        "text-blue-400",
-        "hover:to-blue-50",
-        "hover:bg-blue-800",
-      )}
-      onClick={() => {
-        console.log("alert");
-        alert(123);
-      }}
-    >
-      Header
-    </h1>
+    <header className="border-b mt-4 mb-10">
+      <h1
+        className={clsx(
+          'font-extrabold p-8 text-4xl/tight text-center',
+          'sm:text-5xl/tight',
+          'md:text-6xl/tight',
+          'lg:text-7xl/tight',
+        )}
+      >
+        <Link className="w-full h-full" href="#">
+          <h1>Next Blog</h1>
+        </Link>
+      </h1>
+    </header>
   );
 }

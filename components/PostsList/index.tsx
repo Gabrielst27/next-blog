@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { PostCoverImageComponent } from '../PostCoverImage';
 import { PostSummaryComponent } from '../PostSummary';
 import { PostModel } from '../../models/post.model';
+import { PostComponent } from '../Post';
 
 type Posts = {
   posts: PostModel[];
@@ -19,33 +20,7 @@ export async function PostsListComponent({ posts }: Posts) {
       )}
     >
       {posts.map((post) => {
-        const postLink = `/post/${post.slug}`;
-        return (
-          <div
-            className={clsx(
-              'flex flex-col gap-4 group',
-              'hover:text-slate-400',
-            )}
-            key={post.id}
-          >
-            <PostCoverImageComponent
-              linkProps={{ href: postLink }}
-              imageProps={{
-                src: post.coverImageUrl,
-                alt: post.title,
-                width: 1200,
-                height: 720,
-              }}
-            />
-
-            <PostSummaryComponent
-              title={post.title}
-              slug={post.slug}
-              createdAt={post.createdAt}
-              excerpt={post.excerpt}
-            />
-          </div>
-        );
+        return <PostComponent post={post} key={post.id} />;
       })}
     </section>
   );

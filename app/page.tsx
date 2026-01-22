@@ -13,7 +13,7 @@ export default async function HomePage() {
       </Suspense>
 
       <Suspense fallback={<SpinnerComponent />}>
-        <PostsListComponent posts={posts} />
+        <PostsListComponent posts={posts.slice(1)} />
       </Suspense>
     </section>
   );

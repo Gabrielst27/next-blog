@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
-export default function HeaderComponent() {
+export function HeaderComponent() {
   return (
     <header className="border-b mt-4 mb-10">
       <h1

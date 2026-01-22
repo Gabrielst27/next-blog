@@ -1,15 +1,13 @@
 import clsx from 'clsx';
-import { postService } from '../../repositories/post/post.service';
 import { PostCoverImageComponent } from '../PostCoverImage';
-import { PostHeadingComponent } from '../PostHeading';
-import {
-  formatDatetime,
-  formatRelativeDate,
-} from '../../utils/format-datetime';
 import { PostSummaryComponent } from '../PostSummary';
+import { PostModel } from '../../models/post.model';
 
-export default async function PostsListComponent() {
-  const posts = await postService.findAll();
+type Posts = {
+  posts: PostModel[];
+};
+
+export async function PostsListComponent({ posts }: Posts) {
   return (
     <section
       className={clsx(

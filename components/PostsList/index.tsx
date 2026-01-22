@@ -6,6 +6,7 @@ import {
   formatDatetime,
   formatRelativeDate,
 } from '../../utils/format-datetime';
+import { PostSummaryComponent } from '../PostSummary';
 
 export default async function PostsListComponent() {
   const posts = await postService.findAll();
@@ -38,15 +39,13 @@ export default async function PostsListComponent() {
                 height: 720,
               }}
             />
-            <div className="flex flex-col gap-2">
-              <time className="text-slate-500" dateTime={post.updatedAt}>
-                {formatDatetime(post.updatedAt)}
-              </time>
-              <PostHeadingComponent url={postLink}>
-                <p>{post.title}</p>
-              </PostHeadingComponent>
-              <p>{post.excerpt}</p>
-            </div>
+
+            <PostSummaryComponent
+              title={post.title}
+              slug={post.slug}
+              createdAt={post.createdAt}
+              excerpt={post.excerpt}
+            />
           </div>
         );
       })}

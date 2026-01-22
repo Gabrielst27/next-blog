@@ -15,7 +15,7 @@ export async function PostsListComponent({ posts }: Posts) {
         'sm:grid-cols-2',
         'lg:grid-cols-3',
         'rounded-2xl',
-        'p-4',
+        'p-4 mb-6',
       )}
     >
       {posts.map((post) => {

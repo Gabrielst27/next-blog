@@ -10,9 +10,7 @@ import { PostsListComponent } from '../components/PostsList';
 export default async function HomePage() {
   const posts = await findAllPublishedPosts();
   return (
-    <ContainerComponent>
-      <HeaderComponent />
-
+    <section>
       <Suspense fallback={<SpinnerComponent />}>
         <FeaturedPost />
       </Suspense>
@@ -20,8 +18,6 @@ export default async function HomePage() {
       <Suspense fallback={<SpinnerComponent />}>
         <PostsListComponent posts={posts} />
       </Suspense>
-
-      <footer className={clsx('flex', 'justify-center', 'p-10')}>FOOTER</footer>
-    </ContainerComponent>
+    </section>
   );
 }

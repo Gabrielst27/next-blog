@@ -12,7 +12,7 @@ export function HeaderComponent() {
           'lg:text-7xl/tight',
         )}
       >
-        <Link className="w-full h-full" href="#">
+        <Link className="w-full h-full" href="/">
           <h1>Next Blog</h1>
         </Link>
       </h1>

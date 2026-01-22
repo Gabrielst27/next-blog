@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function HeaderComponent() {
   return (
-    <header className="border-b mt-4 mb-10">
+    <header className="border-b p-4">
       <h1
         className={clsx(
           'font-extrabold p-8 text-4xl/tight text-center',

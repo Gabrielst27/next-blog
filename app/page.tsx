@@ -9,7 +9,7 @@ export default async function HomePage() {
   return (
     <section className="m-4 p-4">
       <Suspense fallback={<SpinnerComponent />}>
-        <FeaturedPost />
+        <FeaturedPost post={posts[0]} />
       </Suspense>
 
       <Suspense fallback={<SpinnerComponent />}>

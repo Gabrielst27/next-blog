@@ -10,7 +10,7 @@ export default function NotFoundPage() {
       )}
     >
       <h1 className="text-7xl text-center">404</h1>
-      <p>Erro 404 - página que você está tentando acessar não existe</p>
+      <p>Erro 404 - A página que você está tentando acessar não existe</p>
     </section>
   );
 }

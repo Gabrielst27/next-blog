@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../PostCoverImage';
-import { PostSummaryComponent } from '../PostSummary';
+import { PostCoverImageComponent } from '../PostItemCoverImage';
+import { PostSummaryComponent } from '../PostItemSummary';
 import { PostModel } from '../../models/post.model';
 
 type PostProps = {

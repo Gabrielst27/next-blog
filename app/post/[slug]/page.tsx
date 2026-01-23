@@ -1,8 +1,31 @@
+import { findPostBySlugCached as findPostBySlugCached } from '../../../lib/posts/queries';
+import { Metadata } from 'next';
+import { SpinnerComponent } from '../../../components/Spinner';
+import { Suspense } from 'react';
+import { PostSectionComponent } from '../../../components/PostSection';
+
 type PostSlugPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export async function generateMetadata({
+  params,
+}: PostSlugPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await findPostBySlugCached(slug);
+  return {
+    title: post ? post.title : 'NotFound',
+    description: post ? post.excerpt : 'NotFound',
+  };
+}
+
 export default async function PostSlugPage({ params }: PostSlugPageProps) {
   const { slug } = await params;
-  return <h1>{slug}</h1>;
+  return (
+    <section className="m-6">
+      <Suspense fallback={<SpinnerComponent />}>
+        <PostSectionComponent slug={slug} />
+      </Suspense>
+    </section>
+  );
 }

@@ -1,14 +1,9 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../PostCoverImage';
-import { PostSummaryComponent } from '../PostSummary';
-import { PostModel } from '../../models/post.model';
-import { PostComponent } from '../Post';
+import { PostComponent } from '../PostItem';
+import { findAllPublishedPostsCached } from '../../lib/posts/queries';
 
-type Posts = {
-  posts: PostModel[];
-};
-
-export async function PostsListComponent({ posts }: Posts) {
+export async function PostsListComponent() {
+  const posts = (await findAllPublishedPostsCached()).slice(1);
   return (
     <section
       className={clsx(

@@ -1,13 +1,11 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../PostCoverImage';
-import { PostHeadingComponent } from '../PostHeading';
-import { PostModel } from '../../models/post.model';
+import { PostCoverImageComponent } from '../PostItemCoverImage';
+import { PostHeadingComponent } from '../PostItemHeading';
+import { findAllPublishedPostsCached } from '../../lib/posts/queries';
 
-type PostProps = {
-  post: PostModel;
-};
-
-export function FeaturedPost({ post }: PostProps) {
+export async function FeaturedPost() {
+  const posts = await findAllPublishedPostsCached();
+  const featuredPost = posts[0];
   return (
     <section className="grid grid-cols-1 gap-6">
       <h1
@@ -28,12 +26,12 @@ export function FeaturedPost({ post }: PostProps) {
         )}
       >
         <PostCoverImageComponent
-          linkProps={{ href: `post/${post.slug}` }}
+          linkProps={{ href: `post/${featuredPost.slug}` }}
           imageProps={{
             width: 1200,
             height: 720,
-            alt: post.title,
-            src: post.coverImageUrl,
+            alt: featuredPost.title,
+            src: featuredPost.coverImageUrl,
             priority: true,
           }}
         />
@@ -43,11 +41,11 @@ export function FeaturedPost({ post }: PostProps) {
             20/01/2026 19:32
           </time>
 
-          <PostHeadingComponent url={`post/${post.slug}`}>
-            {post.title}
+          <PostHeadingComponent url={`post/${featuredPost.slug}`}>
+            {featuredPost.title}
           </PostHeadingComponent>
 
-          <p>{post.excerpt}</p>
+          <p>{featuredPost.excerpt}</p>
         </div>
       </div>
     </section>

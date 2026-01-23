@@ -27,10 +27,16 @@ export class PostService implements PostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    await this.simulateWait();
     const posts = await this.findAllPublished();
     const post = posts.find((post) => post.id === id);
-    if (!post) throw new Error('Post não encontrado');
+    if (!post) throw new Error('Post não encontrado com o ID fornecido');
+    return post;
+  }
+
+  async findBySlug(slug: string): Promise<PostModel> {
+    const posts = await this.findAllPublished();
+    const post = posts.find((post) => post.slug === slug);
+    if (!post) throw new Error('Post não encontrado com o slug fornecido');
     return post;
   }
 }

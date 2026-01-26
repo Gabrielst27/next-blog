@@ -2,7 +2,7 @@ import { findPostBySlugCached as findPostBySlugCached } from '../../../lib/posts
 import { Metadata } from 'next';
 import { SpinnerComponent } from '../../../components/Spinner';
 import { Suspense } from 'react';
-import { PostSectionComponent } from '../../../components/PostSection';
+import { PostArticleComponent } from '../../../components/PostArticle';
 
 type PostSlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -24,7 +24,7 @@ export default async function PostSlugPage({ params }: PostSlugPageProps) {
   return (
     <section className="m-6">
       <Suspense fallback={<SpinnerComponent />}>
-        <PostSectionComponent slug={slug} />
+        <PostArticleComponent slug={slug} />
       </Suspense>
     </section>
   );

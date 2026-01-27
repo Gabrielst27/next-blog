@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { postService } from '../../repositories/post/post.service';
+import { postService } from '@/repositories/post/post.service';
 
 export const findAllPublishedPostsCached = cache(async () => {
   return await postService.findAllPublished();

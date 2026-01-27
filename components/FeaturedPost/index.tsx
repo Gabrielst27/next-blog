@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../PostItemCoverImage';
-import { PostHeadingComponent } from '../PostItemHeading';
-import { findAllPublishedPostsCached } from '../../lib/posts/queries';
+import { findAllPublishedPostsCached } from '@/lib/posts/queries';
+import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
+import { PostHeadingComponent } from '@/components/PostItemHeading';
 
 export async function FeaturedPost() {
   const posts = await findAllPublishedPostsCached();

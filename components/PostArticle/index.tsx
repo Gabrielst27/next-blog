@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import { findPostBySlugCached } from '../../lib/posts/queries';
+import { findPostBySlugCached } from '@/lib/posts/queries';
 import { notFound } from 'next/navigation';
-import { PostHeadingComponent } from '../PostItemHeading';
-import { PostDateComponent } from '../PostDate';
-import { SafeMarkdownComponent } from '../SafeMarkdown';
+import { PostHeadingComponent } from '@/components/PostItemHeading';
+import { PostDateComponent } from '@/components/PostDate';
+import { SafeMarkdownComponent } from '@/components/SafeMarkdown';
 
 type PostArticleProps = {
   slug: string;

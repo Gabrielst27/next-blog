@@ -1,7 +1,6 @@
-import { PostSummaryDto } from '../../dtos/post-summary.dto';
-import { formatDatetime } from '../../utils/format-datetime';
-import { PostDateComponent } from '../PostDate';
-import { PostHeadingComponent } from '../PostItemHeading';
+import { PostDateComponent } from '@/components/PostDate';
+import { PostHeadingComponent } from '@/components/PostItemHeading';
+import { PostSummaryDto } from '@/dtos/post-summary.dto';
 
 export function PostSummaryComponent({
   slug,

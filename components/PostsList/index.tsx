@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { PostComponent } from '../PostItem';
-import { findAllPublishedPostsCached } from '../../lib/posts/queries';
+import { findAllPublishedPostsCached } from '@/lib/posts/queries';
+import { PostComponent } from '@/components/PostItem';
 
 export async function PostsListComponent() {
   const posts = (await findAllPublishedPostsCached()).slice(1);

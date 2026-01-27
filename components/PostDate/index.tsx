@@ -1,7 +1,4 @@
-import {
-  formatDatetime,
-  formatRelativeDate,
-} from '../../utils/format-datetime';
+import { formatDatetime, formatRelativeDate } from '@/utils/format-datetime';
 
 type PostDateProps = {
   dateTime: string;

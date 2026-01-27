@@ -17,10 +17,8 @@ export function ErrorMessageComponent({
         'flex items-center justify-center flex-col gap-8',
       )}
     >
-      <div>
-        <h1 className="text-7xl text-center">{contentTitle}</h1>
-        <p>{content}</p>
-      </div>
+      <h1 className="text-7xl text-center font-bold">{contentTitle}</h1>
+      <p className="text-center">{content}</p>
     </div>
   );
 }

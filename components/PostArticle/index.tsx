@@ -4,6 +4,7 @@ import { findPostBySlugCached } from '../../lib/posts/queries';
 import { notFound } from 'next/navigation';
 import { PostHeadingComponent } from '../PostItemHeading';
 import { PostDateComponent } from '../PostDate';
+import { SafeMarkdownComponent } from '../SafeMarkdown';
 
 type PostArticleProps = {
   slug: string;
@@ -41,7 +42,7 @@ export async function PostArticleComponent({ slug }: PostArticleProps) {
       </header>
       <section className="flex flex-col gap-6">
         <p className="text-xl">{post.excerpt}</p>
-        <div>{post.content}</div>
+        <SafeMarkdownComponent markdown={post.content} />
         <p>
           Última atualização:{' '}
           <PostDateComponent dateTime={post.updatedAt} relative />

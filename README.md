@@ -20,14 +20,14 @@ Feito isso, basta rodar uma migration ou iniciar a aplicação que o arquivo do 
 
 ## Comandos do drizzle-kit
 
-- Salvar com migration:
+- Salvar migration:
 
 ```bash
 npx drizzle-kit generate
 ```
 
-- Salvar sem migration (não recomendado):
+- Rodar migration:
 
 ```bash
-npx drizzle-kit push
+npx drizzle-kit migrate
 ```

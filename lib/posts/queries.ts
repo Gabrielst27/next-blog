@@ -1,11 +1,13 @@
 import { cache } from 'react';
-import { postService } from '@/repositories/post/post.service';
+import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 
 export const findAllPublishedPostsCached = cache(async () => {
-  return await postService.findAllPublished();
+  return await drizzlePostRepository.findAllPublished();
 });
 
 export const findPostBySlugCached = cache(async (slug: string) => {
-  const post = await postService.findBySlug(slug).catch(() => undefined);
+  const post = await drizzlePostRepository
+    .findPublishedBySlug(slug)
+    .catch(() => undefined);
   return post;
 });

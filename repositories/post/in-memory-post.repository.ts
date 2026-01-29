@@ -1,13 +1,13 @@
 import { resolve } from 'path';
 import { PostModel } from '@/models/post.model';
-import { PostRepository } from './post.repository';
+import { IPostRepository } from './post.repository.interface';
 import { readFile } from 'fs/promises';
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'db', 'seed', 'posts.json');
 const WAITING_SIMULATION_MS = 0;
 
-export class PostService implements PostRepository {
+export class InMemoryPostRepository implements IPostRepository {
   private async readFromDisk(): Promise<PostModel[]> {
     const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
     const parsedJson = JSON.parse(jsonContent);
@@ -33,7 +33,7 @@ export class PostService implements PostRepository {
     return post;
   }
 
-  async findBySlug(slug: string): Promise<PostModel> {
+  async findPublishedBySlug(slug: string): Promise<PostModel> {
     const posts = await this.findAllPublished();
     const post = posts.find((post) => post.slug === slug);
     if (!post) throw new Error('Post não encontrado com o slug fornecido');
@@ -41,4 +41,5 @@ export class PostService implements PostRepository {
   }
 }
 
-export const postService: PostRepository = new PostService();
+export const inMemoryPostService: IPostRepository =
+  new InMemoryPostRepository();

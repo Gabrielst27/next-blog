@@ -1,6 +1,6 @@
-import { PostSummaryDto } from '../../dtos/post-summary.dto';
-import { formatDatetime } from '../../utils/format-datetime';
-import { PostHeadingComponent } from '../PostHeading';
+import { PostDateComponent } from '@/components/PostDate';
+import { PostHeadingComponent } from '@/components/PostItemHeading';
+import { PostSummaryDto } from '@/dtos/post-summary.dto';
 
 export function PostSummaryComponent({
   slug,
@@ -12,9 +12,7 @@ export function PostSummaryComponent({
   const postLink = `/post/${slug}`;
   return (
     <div className="flex flex-col gap-2 sm:justify-center">
-      <time className="text-slate-500" dateTime={createdAt}>
-        {formatDatetime(createdAt)}
-      </time>
+      <PostDateComponent dateTime={createdAt} />
       <PostHeadingComponent as={postHeading} url={postLink}>
         <p>{title}</p>
       </PostHeadingComponent>

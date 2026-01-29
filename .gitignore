@@ -42,3 +42,7 @@ next-env.d.ts
 
 # ide
 .prettierrc
+
+# db files
+db.sqlite3
+drizzle.config.js

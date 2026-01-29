@@ -1,25 +1,15 @@
-import clsx from 'clsx';
-import PostsListComponent from '../components/PostsList';
 import { Suspense } from 'react';
-import { SpinnerComponent } from '../components/Spinner';
-import { ContainerComponent } from '../components/Container';
-import HeaderComponent from '../components/Header';
-import { FeaturedPost } from '../components/FeaturedPost';
+import { FeaturedPost } from '@/components/FeaturedPost';
+import { PostsListComponent } from '@/components/PostsList';
+import { LoadingSpinnerComponent } from '@/components/LoadingSpinner';
 
 export default async function HomePage() {
   return (
-    <ContainerComponent>
-      <HeaderComponent />
-
-      <Suspense fallback={<SpinnerComponent />}>
+    <section className="m-4 p-4">
+      <Suspense fallback={<LoadingSpinnerComponent />}>
         <FeaturedPost />
-      </Suspense>
-
-      <Suspense fallback={<SpinnerComponent />}>
         <PostsListComponent />
       </Suspense>
-
-      <footer className={clsx('flex', 'justify-center', 'p-10')}>FOOTER</footer>
-    </ContainerComponent>
+    </section>
   );
 }

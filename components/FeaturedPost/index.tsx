@@ -1,8 +1,11 @@
 import clsx from 'clsx';
-import { PostCoverImageComponent } from '../PostCoverImage';
-import { PostHeadingComponent } from '../PostHeading';
+import { findAllPublishedPostsCached } from '@/lib/posts/queries';
+import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
+import { PostHeadingComponent } from '@/components/PostItemHeading';
 
-export function FeaturedPost() {
+export async function FeaturedPost() {
+  const posts = await findAllPublishedPostsCached();
+  const featuredPost = posts[0];
   return (
     <section className="grid grid-cols-1 gap-6">
       <h1
@@ -23,12 +26,12 @@ export function FeaturedPost() {
         )}
       >
         <PostCoverImageComponent
-          linkProps={{ href: 'google.com' }}
+          linkProps={{ href: `post/${featuredPost.slug}` }}
           imageProps={{
             width: 1200,
             height: 720,
-            alt: 'Título do post',
-            src: '/images/bryen_5.png',
+            alt: featuredPost.title,
+            src: featuredPost.coverImageUrl,
             priority: true,
           }}
         />
@@ -38,14 +41,11 @@ export function FeaturedPost() {
             20/01/2026 19:32
           </time>
 
-          <PostHeadingComponent url="t.me" as="h2">
-            Lorem ipsum dolor sit amet
+          <PostHeadingComponent url={`post/${featuredPost.slug}`}>
+            {featuredPost.title}
           </PostHeadingComponent>
 
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          <p>{featuredPost.excerpt}</p>
         </div>
       </div>
     </section>

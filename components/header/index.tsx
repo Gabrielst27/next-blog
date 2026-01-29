@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
-export default function HeaderComponent() {
+export function HeaderComponent() {
   return (
-    <header className="border-b mt-4 mb-10">
+    <header className="border-b p-4">
       <h1
         className={clsx(
           'font-extrabold p-8 text-4xl/tight text-center',
@@ -12,7 +12,7 @@ export default function HeaderComponent() {
           'lg:text-7xl/tight',
         )}
       >
-        <Link className="w-full h-full" href="#">
+        <Link className="w-full h-full" href="/">
           <h1>Next Blog</h1>
         </Link>
       </h1>

@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   cacheLife: {
     seconds: {
       stale: 0,
-      revalidate: 10,
-      expire: 10,
+      revalidate: 30,
+      expire: 30,
     },
   },
 };

@@ -7,9 +7,7 @@ import { PostDateComponent } from '@/components/PostDate';
 import { SafeMarkdownComponent } from '@/components/SafeMarkdown';
 
 type PostArticleProps = {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 };
 
 export async function PostArticleComponent({ params }: PostArticleProps) {

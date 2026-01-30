@@ -1,4 +1,4 @@
-import { findPostBySlugCached as findPostBySlugCached } from '@/lib/posts/queries';
+import { findPostBySlugCached } from '@/lib/posts/queries';
 import { Metadata } from 'next';
 import { LoadingSpinnerComponent } from '@/components/LoadingSpinner';
 import { Suspense } from 'react';
@@ -20,11 +20,10 @@ export async function generateMetadata({
 }
 
 export default async function PostSlugPage({ params }: PostSlugPageProps) {
-  const { slug } = await params;
   return (
     <section className="m-6">
       <Suspense fallback={<LoadingSpinnerComponent />}>
-        <PostArticleComponent slug={slug} />
+        <PostArticleComponent params={params} />
       </Suspense>
     </section>
   );

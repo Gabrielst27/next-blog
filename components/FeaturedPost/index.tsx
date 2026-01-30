@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { findAllPublishedPostsCached } from '@/lib/posts/queries';
 import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
 import { PostHeadingComponent } from '@/components/PostItemHeading';
+import { formatDatetime } from '@/utils/format-datetime';
 
 export async function FeaturedPost() {
   const posts = await findAllPublishedPostsCached();
@@ -37,8 +38,11 @@ export async function FeaturedPost() {
         />
 
         <div className={clsx('flex flex-col gap-2 justify-center')}>
-          <time className="text-slate-500 text-sm/tight" dateTime="2025-01-20">
-            20/01/2026 19:32
+          <time
+            className="text-slate-500 text-sm/tight"
+            dateTime={featuredPost.createdAt}
+          >
+            {formatDatetime(featuredPost.createdAt)}
           </time>
 
           <PostHeadingComponent url={`post/${featuredPost.slug}`}>

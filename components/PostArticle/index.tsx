@@ -7,10 +7,13 @@ import { PostDateComponent } from '@/components/PostDate';
 import { SafeMarkdownComponent } from '@/components/SafeMarkdown';
 
 type PostArticleProps = {
-  slug: string;
+  params: Promise<{
+    slug: string;
+  }>;
 };
 
-export async function PostArticleComponent({ slug }: PostArticleProps) {
+export async function PostArticleComponent({ params }: PostArticleProps) {
+  const { slug } = await params;
   const post = await findPostBySlugCached(slug);
   if (!post) notFound();
   return (

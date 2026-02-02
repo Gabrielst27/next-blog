@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
-import { findPostBySlugCached } from '@/lib/posts/queries';
+import { findPublicPostBySlugCached } from '@/lib/posts/queries/public';
 import { notFound } from 'next/navigation';
 import { PostHeadingComponent } from '@/components/PostItemHeading';
 import { PostDateComponent } from '@/components/PostDate';
@@ -12,7 +12,7 @@ type PostArticleProps = {
 
 export async function PostArticleComponent({ params }: PostArticleProps) {
   const { slug } = await params;
-  const post = await findPostBySlugCached(slug);
+  const post = await findPublicPostBySlugCached(slug);
   if (!post) notFound();
   return (
     <article>

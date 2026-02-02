@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import { findAllPublishedPostsCached } from '@/lib/posts/queries';
+import { findAllPublicPostsCached } from '@/lib/posts/queries/public';
 import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
 import { PostHeadingComponent } from '@/components/PostItemHeading';
 import { formatDatetime } from '@/utils/format-datetime';
 
 export async function FeaturedPost() {
-  const posts = await findAllPublishedPostsCached();
+  const posts = await findAllPublicPostsCached();
   const featuredPost = posts[0];
   return (
     <section className="grid grid-cols-1 gap-6">

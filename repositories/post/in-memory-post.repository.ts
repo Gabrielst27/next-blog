@@ -20,6 +20,11 @@ export class InMemoryPostRepository implements IPostRepository {
     await new Promise((resolve) => setTimeout(resolve, WAITING_SIMULATION_MS));
   }
 
+  async findAll(): Promise<PostModel[]> {
+    const posts = await this.readFromDisk();
+    return posts;
+  }
+
   async findAllPublished(): Promise<PostModel[]> {
     await this.simulateWait();
     const posts = await this.readFromDisk();

@@ -11,11 +11,17 @@ export class DrizzleRepository implements IPostRepository {
     return posts;
   }
 
+  async findAll(): Promise<PostModel[]> {
+    const posts = await drizzleDb.query.posts.findMany({
+      orderBy: (posts, { desc }) => desc(posts.createdAt),
+    });
+    return posts;
+  }
+
   async findById(id: string): Promise<PostModel> {
     const post = await drizzleDb.query.posts.findFirst({
       orderBy: (post, { desc }) => desc(post.createdAt),
-      where: (post, { eq, and }) =>
-        and(eq(post.published, true), eq(post.id, id)),
+      where: (post, { eq }) => eq(post.id, id),
     });
     if (!post) throw Error('Post não encontrado com o ID fornecido');
     return post;

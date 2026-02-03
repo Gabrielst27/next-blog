@@ -7,7 +7,7 @@ type PostProps = {
   post: PostModel;
 };
 
-export function PostComponent({ post }: PostProps) {
+export function PostItem({ post }: PostProps) {
   const postLink = `/post/${post.slug}`;
   return (
     <div className={clsx('flex flex-col gap-4 group', 'hover:text-slate-400')}>

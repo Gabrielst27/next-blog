@@ -1,6 +1,6 @@
 import { findPublicPostBySlugCached } from '@/lib/posts/queries/public';
 import { Metadata } from 'next';
-import { LoadingSpinnerComponent } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Suspense } from 'react';
 import { PostArticleComponent } from '@/components/PostArticle';
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
 export default async function PostSlugPage({ params }: PostSlugPageProps) {
   return (
     <section className="m-6">
-      <Suspense fallback={<LoadingSpinnerComponent />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <PostArticleComponent params={params} />
       </Suspense>
     </section>

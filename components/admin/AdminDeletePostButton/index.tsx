@@ -1,10 +1,11 @@
 'use client';
 
 import { deletePostAction } from '@/actions/post/delete-post.action';
+import { Dialog } from '@/components/Dialog';
 import { PostModel } from '@/models/post.model';
 import clsx from 'clsx';
 import { Trash2Icon } from 'lucide-react';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 type AdminDeletePostButtonProps = {
   post: PostModel;
@@ -12,27 +13,51 @@ type AdminDeletePostButtonProps = {
 
 export function AdminDeletePostButton({ post }: AdminDeletePostButtonProps) {
   const [isPending, startTransition] = useTransition();
+  const [showDialog, setShowDialog] = useState(false);
 
   async function handleClick() {
-    if (!confirm('Tem certeza que deseja excluir o post?')) return;
+    setShowDialog(true);
+  }
+
+  function handleConfirm() {
     startTransition(async () => {
       const result = await deletePostAction(post.id);
+      if (result.error) {
+        alert('Erro: ' + result.error);
+      }
     });
+    setShowDialog(false);
+  }
+
+  function handleCancel() {
+    setShowDialog(false);
   }
 
   return (
-    <button
-      className={clsx(
-        'text-red-500 cursor-pointer',
-        'hover:text-red-700 hover:scale-120 transition',
-        'disabled:text-slate-600 disabled:cursor-not-allowed',
+    <>
+      <button
+        className={clsx(
+          'text-red-500 cursor-pointer',
+          'hover:text-red-700 hover:scale-120 transition',
+          'disabled:text-slate-600 disabled:cursor-not-allowed',
+        )}
+        aria-label={`Apagar post: ${post.title}`}
+        title={`Apagar post: ${post.title}`}
+        onClick={handleClick}
+        disabled={isPending}
+      >
+        <Trash2Icon />
+      </button>
+      {showDialog && (
+        <Dialog
+          onCancel={handleCancel}
+          onConfirm={handleConfirm}
+          isVisible={showDialog}
+          title="Excluir o post?"
+          content={`O post "${post.title}" será excluído permanentemente, e não será possível recuperá-lo após a exclusão. Deseja continuar?`}
+          disabled={isPending}
+        />
       )}
-      aria-label={`Apagar post: ${post.title}`}
-      title={`Apagar post: ${post.title}`}
-      onClick={handleClick}
-      disabled={isPending}
-    >
-      <Trash2Icon />
-    </button>
+    </>
   );
 }

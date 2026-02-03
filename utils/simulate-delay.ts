@@ -1,6 +1,6 @@
 import { formatLog } from '@/utils/format-log';
 
-export async function simulateDelay(
+export async function asyncDelay(
   delay: number = 2000,
   verbose: boolean = false,
 ) {

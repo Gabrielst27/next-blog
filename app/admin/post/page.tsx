@@ -1,5 +1,5 @@
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { PostsListAdmin } from '@/components/PostsListAdmin';
+import { AdminPostsList } from '@/components/admin/AdminPostsList';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function AdminPostPage() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <PostsListAdmin />
+      <AdminPostsList />
     </Suspense>
   );
 }

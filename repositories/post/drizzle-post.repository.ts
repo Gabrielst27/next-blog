@@ -1,13 +1,14 @@
 import { drizzleDb } from '@/db/drizzle';
+import { postsTable } from '@/db/drizzle/schemas';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from '@/repositories/post/post.repository.interface';
 import { DELAY_SIMULATION_MS } from '@/utils/constants';
 import { formatLog } from '@/utils/format-log';
-import { simulateDelay } from '@/utils/simulate-delay';
+import { asyncDelay } from '@/utils/simulate-delay';
+import { eq } from 'drizzle-orm';
 
 export class DrizzleRepository implements IPostRepository {
   async findAllPublished(): Promise<PostModel[]> {
-    await simulateDelay(DELAY_SIMULATION_MS);
     formatLog('findAllPublished');
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -17,7 +18,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findAll(): Promise<PostModel[]> {
-    await simulateDelay(DELAY_SIMULATION_MS);
     formatLog('findAll');
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -26,7 +26,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    await simulateDelay(DELAY_SIMULATION_MS);
     formatLog('findById');
     const post = await drizzleDb.query.posts.findFirst({
       orderBy: (post, { desc }) => desc(post.createdAt),
@@ -37,7 +36,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findPublishedBySlug(slug: string): Promise<PostModel> {
-    await simulateDelay(DELAY_SIMULATION_MS);
     formatLog('findPublishedBySlug');
     const post = await drizzleDb.query.posts.findFirst({
       orderBy: (post, { desc }) => desc(post.createdAt),
@@ -46,6 +44,10 @@ export class DrizzleRepository implements IPostRepository {
     });
     if (!post) throw Error('Post não encontrado com o slug fornecido');
     return post;
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
   }
 }
 

@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from './post.repository.interface';
 import { readFile } from 'fs/promises';
-import { simulateDelay } from '@/utils/simulate-delay';
+import { asyncDelay } from '@/utils/simulate-delay';
 import { DELAY_SIMULATION_MS } from '@/utils/constants';
 
 const ROOT_DIR = process.cwd();
@@ -22,7 +22,7 @@ export class InMemoryPostRepository implements IPostRepository {
   }
 
   async findAllPublished(): Promise<PostModel[]> {
-    await simulateDelay(DELAY_SIMULATION_MS);
+    await asyncDelay(DELAY_SIMULATION_MS);
     const posts = await this.readFromDisk();
     return posts.filter((post) => post.published);
   }

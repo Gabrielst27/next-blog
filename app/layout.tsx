@@ -3,7 +3,7 @@ import './globals.css';
 import { ContainerComponent } from '@/components/Container';
 import { HeaderComponent } from '@/components/Header';
 import { FooterComponent } from '@/components/Footer';
-import { AdminMenu } from '@/components/admin/AdminMenu';
+import { NavigationMenu } from '@/components/NavigationMenu';
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +23,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
       <body>
         <ContainerComponent>
           <HeaderComponent />
-          <AdminMenu />
+          <NavigationMenu />
           {children}
           <FooterComponent />
         </ContainerComponent>

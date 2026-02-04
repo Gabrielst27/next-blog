@@ -1,9 +1,11 @@
+import { ToastifyContainer } from '@/components/ToastifyContainer';
 import clsx from 'clsx';
+import { Sidebar } from 'lucide-react';
 import Link from 'next/link';
 
 export function HeaderComponent() {
   return (
-    <header className="flex items-center justify-start border-b p-4">
+    <header className="flex items-center justify-start gap-4 border-b p-4">
       <Link
         href="/"
         className={clsx(
@@ -15,6 +17,7 @@ export function HeaderComponent() {
       >
         <h1>Next Blog</h1>
       </Link>
+      <ToastifyContainer />
     </header>
   );
 }

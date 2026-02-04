@@ -11,10 +11,16 @@ type Result = {
 export async function deletePostAction(id: string): Promise<Result> {
   //TODO: check user login before deletion
   //TODO: implement post deletion
-  const post = drizzlePostRepository.findById(id).catch(() => undefined);
-  if (!id || typeof id !== 'string' || !post) {
+  const post = await drizzlePostRepository.findById(id).catch(() => undefined);
+  if (!post) {
     return {
-      error: 'Invalid ID',
+      error: 'Post não encontrado ou já excluído.',
+      successMessage: '',
+    };
+  }
+  if (!id || typeof id !== 'string') {
+    return {
+      error: 'Erro interno ER-001. Contate o suporte.',
       successMessage: '',
     };
   }
@@ -22,8 +28,9 @@ export async function deletePostAction(id: string): Promise<Result> {
   revalidateTag('posts-admin', 'max');
   revalidateTag(`post-admin-${id}`, 'max');
   revalidateTag('posts', 'max');
+  revalidateTag(`post-${post.slug}`, 'max');
   return {
     error: '',
-    successMessage: 'Post deleted',
+    successMessage: `Post "${post.title}" deletado com sucesso!`,
   };
 }

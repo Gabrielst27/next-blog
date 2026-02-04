@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 
 type AdminDeletePostButtonProps = {
   post: PostModel;
@@ -22,11 +23,13 @@ export function AdminDeletePostButton({ post }: AdminDeletePostButtonProps) {
   }
 
   function handleConfirm() {
+    toast.dismiss();
     startTransition(async () => {
       const result = await deletePostAction(post.id);
       if (result.error) {
-        alert('Erro: ' + result.error);
+        toast.error(result.error);
       } else {
+        toast.success(result.successMessage);
         router.refresh();
       }
     });

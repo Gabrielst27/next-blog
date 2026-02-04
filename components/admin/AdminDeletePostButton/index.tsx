@@ -5,6 +5,7 @@ import { Dialog } from '@/components/Dialog';
 import { PostModel } from '@/models/post.model';
 import clsx from 'clsx';
 import { Trash2Icon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
 type AdminDeletePostButtonProps = {
@@ -12,6 +13,7 @@ type AdminDeletePostButtonProps = {
 };
 
 export function AdminDeletePostButton({ post }: AdminDeletePostButtonProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showDialog, setShowDialog] = useState(false);
 
@@ -24,6 +26,8 @@ export function AdminDeletePostButton({ post }: AdminDeletePostButtonProps) {
       const result = await deletePostAction(post.id);
       if (result.error) {
         alert('Erro: ' + result.error);
+      } else {
+        router.refresh();
       }
     });
     setShowDialog(false);

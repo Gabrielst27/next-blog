@@ -1,13 +1,8 @@
 import { AdminPostItem } from '@/components/admin/AdminPostItem';
-import { findAllPostsAdmin } from '@/lib/posts/queries/admin';
-import { cacheLife, cacheTag } from 'next/cache';
+import { findAllPostsAdminCached } from '@/lib/posts/queries/admin';
 
 export async function AdminPostsList() {
-  'use cache';
-  cacheTag('admin-posts-list');
-  cacheLife('seconds');
-
-  const posts = await findAllPostsAdmin();
+  const posts = await findAllPostsAdminCached();
   return (
     <div className="mb-16">
       {posts.map((post) => {

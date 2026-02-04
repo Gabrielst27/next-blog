@@ -2,9 +2,7 @@ import { drizzleDb } from '@/db/drizzle';
 import { postsTable } from '@/db/drizzle/schemas';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from '@/repositories/post/post.repository.interface';
-import { DELAY_SIMULATION_MS } from '@/utils/constants';
 import { formatLog } from '@/utils/format-log';
-import { asyncDelay } from '@/utils/simulate-delay';
 import { eq } from 'drizzle-orm';
 
 export class DrizzleRepository implements IPostRepository {
@@ -47,6 +45,7 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async deleteById(id: string): Promise<void> {
+    formatLog('deleteById');
     await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
   }
 }

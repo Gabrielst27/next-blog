@@ -1,4 +1,4 @@
-import { AdminSinglePostContent } from '@/components/AdminSinglePostContent';
+import { AdminPostContent } from '@/components/admin/AdminPostContent';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Suspense } from 'react';
 
@@ -10,8 +10,10 @@ export default async function AdminSinglePostPage({
   params,
 }: AdminSinglePostPageProps) {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <AdminSinglePostContent params={params} />
-    </Suspense>
+    <section>
+      <Suspense fallback={<LoadingSpinner />}>
+        <AdminPostContent params={params} />
+      </Suspense>
+    </section>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/Button';
 import clsx from 'clsx';
 
 type DialogProps = {
@@ -32,7 +33,7 @@ export function Dialog({
     >
       <div
         className={clsx(
-          'p-6 mx-6 max-w-2xl rounded-2xl',
+          'p-6 mx-6 max-w-xl rounded-2xl',
           'bg-slate-100 text-slate-950 shadow-lg shadow-black-30',
           'flex flex-col gap-6',
         )}
@@ -49,31 +50,17 @@ export function Dialog({
           {content}
         </p>
         <div className="flex justify-around">
-          <button
-            className={clsx(
-              'py-2 px-10 rounded-2xl bg-slate-400',
-              'sm:px-16',
-              'cursor-pointer hover:scale-120 transition',
-              'disabled:bg-slate-200',
-            )}
+          <Button
+            variant="ghost"
             autoFocus
             onClick={onCancel}
             disabled={disabled}
           >
             Não
-          </button>
-          <button
-            className={clsx(
-              'py-2 px-10 rounded-2xl bg-red-400',
-              'sm:px-16',
-              'cursor-pointer hover:scale-120 transition',
-              'disabled:bg-slate-200',
-            )}
-            onClick={onConfirm}
-            disabled={disabled}
-          >
+          </Button>
+          <Button variant="danger" onClick={onConfirm} disabled={disabled}>
             Sim
-          </button>
+          </Button>
         </div>
       </div>
     </div>

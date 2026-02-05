@@ -1,6 +1,7 @@
 'use client';
 
 import { deletePostAction } from '@/actions/post/delete-post.action';
+import { Button } from '@/components/Button';
 import { Dialog } from '@/components/Dialog';
 import { PostModel } from '@/models/post.model';
 import clsx from 'clsx';
@@ -44,8 +45,8 @@ export function AdminDeletePostButton({ post }: AdminDeletePostButtonProps) {
     <>
       <button
         className={clsx(
-          'text-red-500 cursor-pointer',
-          'hover:text-red-700 hover:scale-120 transition',
+          'text-red-400 cursor-pointer',
+          'hover:text-red-500 hover:scale-120 transition',
           'disabled:text-slate-600 disabled:cursor-not-allowed',
         )}
         aria-label={`Apagar post: ${post.title}`}

@@ -1,0 +1,39 @@
+import clsx from 'clsx';
+
+type ButtonProps = {
+  variant: 'default' | 'ghost' | 'danger';
+} & React.ComponentProps<'button'>;
+
+export function Button({
+  variant = 'default',
+  className,
+  ...props
+}: ButtonProps) {
+  const buttonVariants = {
+    default: clsx(
+      'bg-slate-800 text-slate-100',
+      'py-2 px-8 rounded-2xl',
+      'cursor-pointer',
+    ),
+    ghost: clsx(
+      'bg-slate-300 text-slate-900',
+      'py-2 px-8 rounded-2xl',
+      'cursor-pointer',
+    ),
+    danger: clsx(
+      'bg-red-400 text-slate-100',
+      'py-2 px-8 rounded-2xl',
+      'cursor-pointer',
+    ),
+  };
+  const classes = clsx(
+    buttonVariants[variant],
+    'hover:scale-110 transition',
+    'disabled:bg-slate-200',
+    'disabled:text-slate-400',
+    'disabled:cursor-not-allowed',
+    'flex items-center justify-center',
+    className,
+  );
+  return <button className={classes} {...props}></button>;
+}

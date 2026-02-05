@@ -22,24 +22,20 @@ export function NavigationMenu() {
 
   const navClasses = clsx(
     'bg-slate-800 text-slate-100 rounded-b-2xl',
-    'flex flex-col px-8 mb-8 gap-2',
-    'sm:flex-row sm:justify-start sm:flex-wrap sm:gap-12',
+    'flex flex-col mb-8 gap-2',
+    'sm:flex-row sm:justify-around sm:flex-wrap sm:gap-2',
     !isOpen && 'h-10',
     !isOpen && 'overflow-hidden',
     'sm:overflow-visible sm:h-auto',
   );
   const linkClasses = clsx(
-    '[&>svg]:w-4 [&>svg]:h-4 text-lg px-2',
+    '[&>svg]:w-4 [&>svg]:h-4 text-lg px-6 sm:px-12',
     'flex items-center justify-start gap-2 cursor-pointer',
     'transition hover:bg-slate-700 rounded-lg',
     'h-10',
     'shrink-0',
   );
-  const openCloseBtnClasses = clsx(
-    linkClasses,
-    'text-blue-200 italic',
-    'sm:hidden',
-  );
+  const openCloseBtnClasses = clsx(linkClasses, 'text-blue-200', 'sm:hidden');
 
   return (
     <nav className={navClasses}>
@@ -68,7 +64,7 @@ export function NavigationMenu() {
       </a>
       <Link className={linkClasses} href="/admin/post">
         <FileTextIcon />
-        Admin
+        Posts
       </Link>
       <Link className={linkClasses} href="/admin/post/new-post">
         <PlusIcon />

@@ -9,8 +9,10 @@ export const metadata: Metadata = {
 
 export default async function AdminPostPage() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <AdminPostsList />
-    </Suspense>
+    <section>
+      <Suspense fallback={<LoadingSpinner />}>
+        <AdminPostsList />
+      </Suspense>
+    </section>
   );
 }

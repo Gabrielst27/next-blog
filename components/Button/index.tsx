@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 type ButtonProps = {
-  variant: 'default' | 'ghost' | 'danger';
+  variant?: 'default' | 'ghost' | 'danger';
 } & React.ComponentProps<'button'>;
 
 export function Button({
@@ -11,7 +11,7 @@ export function Button({
 }: ButtonProps) {
   const buttonVariants = {
     default: clsx(
-      'bg-slate-800 text-slate-100',
+      'bg-blue-400 text-slate-100',
       'py-2 px-8 rounded-2xl',
       'cursor-pointer',
     ),

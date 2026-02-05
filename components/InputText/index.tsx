@@ -3,12 +3,12 @@ import { useId } from 'react';
 
 type InputTextProps = {
   labeltext?: string;
-  labelposition?: 'top' | 'left';
+  labelPosition?: 'top' | 'left';
   maxLength: number;
 } & React.ComponentProps<'input'>;
 
 export function InputText({
-  labelposition: labelPosition = 'top',
+  labelPosition: labelPosition = 'top',
   className,
   ...props
 }: InputTextProps) {
@@ -34,7 +34,7 @@ export function InputText({
           {props.labeltext}
         </label>
       )}
-      <input id={inputId} className={inputClasses} {...props} />
+      <input id={inputId} {...props} className={inputClasses} />
     </div>
   );
 }

@@ -21,7 +21,7 @@ export function NavigationMenu() {
   }, [pathName]);
 
   const navClasses = clsx(
-    'bg-slate-800 text-slate-100 rounded-b-2xl',
+    'bg-slate-800 text-slate-100',
     'flex flex-col mb-8 gap-2',
     'sm:flex-row sm:justify-around sm:flex-wrap sm:gap-2',
     !isOpen && 'h-10',
@@ -31,7 +31,7 @@ export function NavigationMenu() {
   const linkClasses = clsx(
     '[&>svg]:w-4 [&>svg]:h-4 text-lg px-6 sm:px-12',
     'flex items-center justify-start gap-2 cursor-pointer',
-    'transition hover:bg-slate-700 rounded-lg',
+    'transition hover:bg-slate-700',
     'h-10',
     'shrink-0',
   );

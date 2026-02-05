@@ -1,9 +1,9 @@
-import { Button } from '@/components/Button';
+import { AdminNewPostForm } from '@/components/admin/AdminNewPostForm';
 
 export default function AdminNewPostPage() {
   return (
-    <section>
-      <div className="flex flex-col gap-6"></div>
+    <section className="p-4">
+      <AdminNewPostForm></AdminNewPostForm>
     </section>
   );
 }

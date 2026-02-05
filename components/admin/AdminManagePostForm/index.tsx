@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/Button';
+import { ImageUploader } from '@/components/ImageUploader';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkdownEditor';
@@ -17,6 +18,7 @@ export function AdminManagePostForm() {
           labeltext="Título"
           placeholder="Digite o título do post"
         />
+        <ImageUploader />
         <MarkdownEditor
           labelText="Conteúdo"
           disabled={false}
@@ -25,11 +27,13 @@ export function AdminManagePostForm() {
           setValue={setContentValue}
         />
         <InputCheckbox labeltext="Publicar ao salvar" />
-        <div className="flex justify-around">
+        <div className="flex flex-col gap-2">
           <Button type="submit" variant="danger">
             Cancelar
           </Button>
-          <Button type="submit">Salvar</Button>
+          <Button type="submit" variant="default">
+            Salvar
+          </Button>
         </div>
       </div>
     </form>

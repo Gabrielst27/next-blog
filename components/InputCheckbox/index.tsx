@@ -15,7 +15,7 @@ export function InputCheckbox({
 }: InputCheckboxProps) {
   const inputId = useId();
 
-  const inputClasses = clsx('outline-none', 'w-4 h-4', className);
+  const inputClasses = clsx('outline-none rounded', 'w-6 h-6', className);
 
   return (
     <div className="flex items-center gap-4">

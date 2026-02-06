@@ -8,7 +8,7 @@ import {
 } from '@/lib/constants';
 import { extname, resolve } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
-import { formatLog } from '@/utils/format-log';
+import { asyncDelay } from '@/utils/simulate-delay';
 
 interface UploadImageResult extends ActionResult {
   url: string;
@@ -53,7 +53,6 @@ export async function uploadImageAction(
   await writeFile(fileFullPath, buffer);
 
   const url = `${IMAGE_SERVER_URL}/${uniqueImageName}`;
-  formatLog(url);
 
-  return makeResult({ url: 'URL' });
+  return makeResult({ url: url, successMessage: 'Imagem enviada' });
 }

@@ -2,10 +2,12 @@
 
 import { uploadImageAction } from '@/actions/upload/upload-image.action';
 import { Button } from '@/components/Button';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { MAX_IMAGE_SIZE } from '@/lib/constants';
 import { formatByteToMB } from '@/utils/format-byte';
+import clsx from 'clsx';
 import { ImageUpIcon } from 'lucide-react';
-import { useRef, useTransition } from 'react';
+import { Suspense, useRef, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
 type ImageUploaderProps = {};
@@ -13,6 +15,7 @@ type ImageUploaderProps = {};
 export function ImageUploader({}: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, startTransition] = useTransition();
+  const [imgUrl, setImgUrl] = useState('');
 
   function handleChooseFile() {
     if (!fileInputRef.current) return;
@@ -20,14 +23,22 @@ export function ImageUploader({}: ImageUploaderProps) {
   }
 
   function handleChange() {
-    if (!fileInputRef.current) return;
+    setImgUrl('');
+    if (!fileInputRef.current) {
+      setImgUrl('');
+      return;
+    }
     const fileInput = fileInputRef.current;
     const file = fileInput?.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setImgUrl('');
+      return;
+    }
     if (file.size > MAX_IMAGE_SIZE) {
       toast.error(
         `Imagem muito grande. Tamanho máximo permitido: ${formatByteToMB(MAX_IMAGE_SIZE)}MB`,
       );
+      setImgUrl('');
       fileInput.value = '';
       return;
     }
@@ -39,8 +50,10 @@ export function ImageUploader({}: ImageUploaderProps) {
       if (result.error) {
         toast.error(result.error);
         fileInput.value = '';
+        setImgUrl('');
         return;
       }
+      setImgUrl(result.url);
       toast.success(result.successMessage);
     });
     fileInput.value = '';
@@ -53,10 +66,35 @@ export function ImageUploader({}: ImageUploaderProps) {
         variant="ghost"
         type="button"
         onClick={handleChooseFile}
+        disabled={isUploading}
       >
         <ImageUpIcon />
         Enviar imagem de capa
       </Button>
+      <div className={clsx('flex flex-col gap-2')}>
+        <div
+          className={clsx(
+            'h-60 w-full',
+            'border border-slate-600 rounded-lg overflow-clip',
+            'flex items-center justify-center',
+          )}
+        >
+          {!!isUploading && <LoadingSpinner />}
+          {!imgUrl && !isUploading && <h3>Nenhuma imagem de capa.</h3>}
+          {!!imgUrl && <img src={imgUrl} />}
+        </div>
+        <div
+          className={clsx(
+            'h-min-10 w-full p-2',
+            'border border-slate-600 rounded-lg',
+            'flex flex-col gap-2',
+          )}
+        >
+          <p className="font-bold">URL:</p>
+          {!imgUrl && !isUploading && <p>Nenhuma imagem de capa.</p>}
+          {!!imgUrl && <p className="wrap-break-word">{imgUrl}</p>}
+        </div>
+      </div>
       <input
         onChange={handleChange}
         ref={fileInputRef}

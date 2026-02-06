@@ -47,3 +47,6 @@ next-env.d.ts
 # db files
 db.sqlite3
 drizzle.config.js
+
+# uploads
+uploads/

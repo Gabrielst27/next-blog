@@ -1,15 +1,18 @@
 'use client';
 
+import { uploadImageAction } from '@/actions/upload/upload-image.action';
 import { Button } from '@/components/Button';
-import { ErrorMessageComponent } from '@/components/ErrorMessage';
+import { MAX_IMAGE_SIZE } from '@/lib/constants';
+import { formatByteToMB } from '@/utils/format-byte';
 import { ImageUpIcon } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
 type ImageUploaderProps = {};
 
 export function ImageUploader({}: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, startTransition] = useTransition();
 
   function handleChooseFile() {
     if (!fileInputRef.current) return;
@@ -21,14 +24,25 @@ export function ImageUploader({}: ImageUploaderProps) {
     const fileInput = fileInputRef.current;
     const file = fileInput?.files?.[0];
     if (!file) return;
-    if (file.size > 1000000) {
-      toast.error('Imagem muito grande. Tamanho máximo: 1MB');
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast.error(
+        `Imagem muito grande. Tamanho máximo permitido: ${formatByteToMB(MAX_IMAGE_SIZE)}MB`,
+      );
       fileInput.value = '';
       return;
     }
     const formData = new FormData();
     formData.append('file', file);
-    console.log(formData.get('file'));
+    //TODO - Add action to send image to the server
+    startTransition(async () => {
+      const result = await uploadImageAction(formData);
+      if (result.error) {
+        toast.error(result.error);
+        fileInput.value = '';
+        return;
+      }
+      toast.success(result.successMessage);
+    });
     fileInput.value = '';
   }
 

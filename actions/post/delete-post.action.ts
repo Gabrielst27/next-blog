@@ -1,6 +1,6 @@
 'use server';
 
-import { ActionResult } from '@/models/action-dtos/action-result.dto';
+import { ActionResult } from '@/dto/post/action-result.dto';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { revalidateTag } from 'next/cache';
 

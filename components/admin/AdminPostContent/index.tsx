@@ -1,8 +1,21 @@
+import { AdminManagePostForm } from '@/components/admin/AdminManagePostForm';
+import { makePublicPost } from '@/dto/post/public-post.dto';
+import { findPostByIdAdminCached } from '@/lib/posts/queries/admin';
+import { formatLog } from '@/utils/format-log';
+import { notFound } from 'next/navigation';
+
 type AdminPostContentProps = {
   params: Promise<{ id: string }>;
 };
 
 export async function AdminPostContent({ params }: AdminPostContentProps) {
   const { id } = await params;
-  return <div>Testando {id}</div>;
+  const post = await findPostByIdAdminCached(id).catch();
+  if (!post) notFound();
+  const publicPost = makePublicPost(post);
+  return (
+    <div>
+      <AdminManagePostForm publicPost={publicPost} />
+    </div>
+  );
 }

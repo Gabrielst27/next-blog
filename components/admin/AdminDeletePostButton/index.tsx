@@ -1,7 +1,6 @@
 'use client';
 
 import { deletePostAction } from '@/actions/post/delete-post.action';
-import { Button } from '@/components/Button';
 import { Dialog } from '@/components/Dialog';
 import { PostModel } from '@/models/post.model';
 import clsx from 'clsx';

@@ -5,10 +5,17 @@ import { ImageUploader } from '@/components/ImageUploader';
 import { InputCheckbox } from '@/components/InputCheckbox';
 import { InputText } from '@/components/InputText';
 import { MarkdownEditor } from '@/components/MarkdownEditor';
+import { PublicPostDto } from '@/dto/post/public-post.dto';
 import { useState } from 'react';
 
-export function AdminManagePostForm() {
-  const [contentValue, setContentValue] = useState('');
+interface AdminManagePostFormProps {
+  publicPost?: PublicPostDto | null;
+}
+
+export function AdminManagePostForm({
+  publicPost = null,
+}: AdminManagePostFormProps) {
+  const [contentValue, setContentValue] = useState(publicPost?.content || '');
 
   return (
     <form action="" className="mb-16">
@@ -16,25 +23,35 @@ export function AdminManagePostForm() {
         <InputText
           maxLength={32}
           labeltext="Título"
-          placeholder="Digite o título do post"
+          name="title"
+          placeholder="Digite o título"
+          defaultValue={publicPost?.title || ''}
         />
-        <ImageUploader />
+        <InputText
+          maxLength={32}
+          labeltext="Excerto"
+          name="excerpt"
+          placeholder="Digite o resumo"
+          defaultValue={publicPost?.excerpt || ''}
+        />
+        <InputText
+          maxLength={32}
+          labeltext="Autor"
+          name="author"
+          placeholder="Digite o nome do autor"
+          defaultValue={publicPost?.author || ''}
+        />
+        <ImageUploader imageUrl={publicPost?.coverImageUrl} />
         <MarkdownEditor
           labelText="Conteúdo"
-          disabled={false}
-          textareaName="content"
           value={contentValue}
           setValue={setContentValue}
+          textareaName="content"
+          disabled={false}
         />
-        <InputCheckbox labeltext="Publicar ao salvar" />
-        <div className="flex flex-col gap-2">
-          <Button type="submit" variant="danger">
-            Cancelar
-          </Button>
-          <Button type="submit" variant="default">
-            Salvar
-          </Button>
-        </div>
+        <InputCheckbox name="published" labeltext="Publicar?" />
+        {!!publicPost && <Button variant="danger">Excluir</Button>}
+        <Button type="submit">Salvar</Button>
       </div>
     </form>
   );

@@ -1,21 +1,23 @@
 'use client';
 
-import { uploadImageAction } from '@/actions/upload/upload-image.action';
+import clsx from 'clsx';
+import { ClientLoadingSpinner } from '@/components/ClientLoadingSpinner';
 import { Button } from '@/components/Button';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { uploadImageAction } from '@/actions/upload/upload-image.action';
 import { MAX_IMAGE_SIZE } from '@/lib/constants';
 import { formatByteToMB } from '@/utils/format-byte';
-import clsx from 'clsx';
 import { ImageUpIcon } from 'lucide-react';
-import { Suspense, useRef, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
-type ImageUploaderProps = {};
+type ImageUploaderProps = {
+  imageUrl?: string;
+};
 
-export function ImageUploader({}: ImageUploaderProps) {
+export function ImageUploader({ imageUrl }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, startTransition] = useTransition();
-  const [imgUrl, setImgUrl] = useState('');
+  const [imgUrl, setImgUrl] = useState(imageUrl || '');
 
   function handleChooseFile() {
     if (!fileInputRef.current) return;
@@ -74,12 +76,12 @@ export function ImageUploader({}: ImageUploaderProps) {
       <div className={clsx('flex flex-col gap-2')}>
         <div
           className={clsx(
-            'h-60 w-full',
+            'h-100 w-full',
             'border border-slate-600 rounded-lg overflow-clip',
             'flex items-center justify-center',
           )}
         >
-          {!!isUploading && <LoadingSpinner />}
+          {!!isUploading && <ClientLoadingSpinner />}
           {!imgUrl && !isUploading && <h3>Nenhuma imagem de capa.</h3>}
           {!!imgUrl && <img src={imgUrl} />}
         </div>
@@ -90,8 +92,10 @@ export function ImageUploader({}: ImageUploaderProps) {
             'flex flex-col gap-2',
           )}
         >
-          <p className="font-bold">URL:</p>
-          {!imgUrl && !isUploading && <p>Nenhuma imagem de capa.</p>}
+          <p className="font-bold">URL da imagem:</p>
+          {!imgUrl && !isUploading && (
+            <p className="text-slate-600">Nenhuma url ainda.</p>
+          )}
           {!!imgUrl && <p className="wrap-break-word">{imgUrl}</p>}
         </div>
       </div>

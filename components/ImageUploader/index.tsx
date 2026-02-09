@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 import { uploadImageAction } from '@/actions/upload/upload-image.action';
 import { MAX_IMAGE_SIZE } from '@/lib/constants';
 import { formatByteToMB } from '@/utils/format-byte';
-import { ImageUpIcon } from 'lucide-react';
+import { Copy, ImageUpIcon } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
@@ -14,10 +14,10 @@ type ImageUploaderProps = {
   imageUrl?: string;
 };
 
-export function ImageUploader({ imageUrl }: ImageUploaderProps) {
+export function ImageUploader({ imageUrl: prevImageUrl }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, startTransition] = useTransition();
-  const [imgUrl, setImgUrl] = useState(imageUrl || '');
+  const [imgUrl, setImgUrl] = useState(prevImageUrl || '');
 
   function handleChooseFile() {
     if (!fileInputRef.current) return;
@@ -61,6 +61,15 @@ export function ImageUploader({ imageUrl }: ImageUploaderProps) {
     fileInput.value = '';
   }
 
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(imgUrl);
+      toast.success('URL copiada para a área de transferência!');
+    } catch (error) {
+      toast.error('Erro ao copiar URL');
+    }
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <Button
@@ -92,11 +101,19 @@ export function ImageUploader({ imageUrl }: ImageUploaderProps) {
             'flex flex-col gap-2',
           )}
         >
-          <p className="font-bold">URL da imagem:</p>
-          {!imgUrl && !isUploading && (
-            <p className="text-slate-600">Nenhuma url ainda.</p>
-          )}
-          {!!imgUrl && <p className="wrap-break-word">{imgUrl}</p>}
+          <div className="flex justify-between">
+            <p className="font-bold">URL da imagem:</p>
+            <Button
+              onClick={handleCopy}
+              variant="icon"
+              type="button"
+              aria-label="Copiar para a área de transferência"
+            >
+              <Copy className="w-4 h-full"></Copy>
+            </Button>
+          </div>
+          <p>{imgUrl}</p>
+          <input type="hidden" name="coverImageUrl" value={imgUrl} />
         </div>
       </div>
       <input

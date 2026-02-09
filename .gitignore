@@ -43,6 +43,7 @@ next-env.d.ts
 
 # ide
 .prettierrc
+.vscode
 
 # db files
 db.sqlite3

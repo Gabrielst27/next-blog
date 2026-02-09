@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 
 type ButtonProps = {
-  variant?: 'default' | 'ghost' | 'danger';
+  variant?: 'default' | 'ghost' | 'danger' | 'icon';
 } & React.ComponentProps<'button'>;
 
 export function Button({
@@ -27,6 +27,7 @@ export function Button({
       'py-2 px-8 rounded-lg',
       'cursor-pointer',
     ),
+    icon: clsx('text-slate-100', 'p-0 rounded-lg', 'cursor-pointer'),
   };
   const classes = clsx(
     buttonVariants[variant],

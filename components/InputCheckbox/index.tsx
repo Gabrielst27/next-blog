@@ -18,7 +18,7 @@ export function InputCheckbox({
   const inputClasses = clsx('outline-none rounded-lg', 'w-5 h-5', className);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-2">
       {labelPosition !== 'right' && props.labeltext && (
         <label htmlFor={inputId}>{props.labeltext}</label>
       )}

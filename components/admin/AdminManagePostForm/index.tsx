@@ -1,6 +1,7 @@
 'use client';
 
 import { createPostAction } from '@/actions/post/create-post-action';
+import { deletePostAction } from '@/actions/post/delete-post.action';
 import { updatePostAction } from '@/actions/post/update-post-action';
 import { Button } from '@/components/Button';
 import { ImageUploader } from '@/components/ImageUploader';
@@ -120,10 +121,16 @@ export function AdminManagePostForm(props: AdminManagePostFormProps) {
         <InputCheckbox
           name="published"
           labeltext="Publicar?"
+          defaultChecked={formState.published}
           disabled={isPending}
         />
         {!!publicPost && (
-          <Button variant="danger" type="button" disabled={isPending}>
+          <Button
+            variant="danger"
+            type="button"
+            disabled={isPending}
+            onClick={() => deletePostAction(publicPost.id)}
+          >
             Excluir
           </Button>
         )}

@@ -1,7 +1,6 @@
 import { AdminManagePostForm } from '@/components/admin/AdminManagePostForm';
 import { makePublicPostFromPostModel } from '@/dto/post/public-post.dto';
 import { findPostByIdAdminCached } from '@/lib/posts/queries/admin';
-import { formatLog } from '@/utils/format-log';
 import { notFound } from 'next/navigation';
 
 type AdminPostContentProps = {
@@ -15,7 +14,7 @@ export async function AdminPostContent({ params }: AdminPostContentProps) {
   const publicPost = makePublicPostFromPostModel(post);
   return (
     <div>
-      <AdminManagePostForm publicPost={publicPost} />
+      <AdminManagePostForm mode="update" publicPost={publicPost} />
     </div>
   );
 }

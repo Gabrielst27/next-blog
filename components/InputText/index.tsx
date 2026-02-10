@@ -21,13 +21,21 @@ export function InputText({
     left: clsx('flex gap-4'),
   };
   const containerClasses = containerProps[labelPosition];
-  const labelClasses = props.disabled ? clsx('text-slate-500') : clsx();
-  const inputClasses = clsx(
-    'outline-0',
-    'border-b border-slate-500',
-    'p-2',
-    'focus:border-slate-100',
-  );
+  const labelClasses = props.readOnly ? clsx('text-slate-500') : clsx();
+  const inputClasses = props.readOnly
+    ? clsx(
+        'text-slate-500',
+        'outline-0',
+        'border-b border-slate-500',
+        'p-2',
+        'focus:border-slate-100',
+      )
+    : clsx(
+        'outline-0',
+        'border-b border-slate-500',
+        'p-2',
+        'focus:border-slate-100',
+      );
 
   return (
     <div className={containerClasses}>

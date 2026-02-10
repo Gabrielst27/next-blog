@@ -1,6 +1,7 @@
 'use client';
 
 import { createPostAction } from '@/actions/post/create-post-action';
+import { updatePostAction } from '@/actions/post/update-post-action';
 import { Button } from '@/components/Button';
 import { ImageUploader } from '@/components/ImageUploader';
 import { InputCheckbox } from '@/components/InputCheckbox';
@@ -13,17 +14,36 @@ import {
 import { useActionState, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-interface AdminManagePostFormProps {
-  publicPost?: PublicPostDto;
-}
+type AdminManagePostFormUpdateProps = {
+  mode: 'update';
+  publicPost: PublicPostDto;
+};
+type AdminManagePostFormCreateProps = {
+  mode: 'create';
+};
+type AdminManagePostFormProps =
+  | AdminManagePostFormUpdateProps
+  | AdminManagePostFormCreateProps;
 
-export function AdminManagePostForm({ publicPost }: AdminManagePostFormProps) {
+export function AdminManagePostForm(props: AdminManagePostFormProps) {
+  const { mode } = props;
+  let publicPost;
+  if (props.mode === 'update') {
+    publicPost = props.publicPost;
+  }
+
+  const actionsMap = {
+    update: updatePostAction,
+    create: createPostAction,
+  };
+
   const initialState = {
     formState: makePartialPublicPost(publicPost),
     errors: [],
   };
-  const [state, createPost, isPending] = useActionState(
-    createPostAction,
+
+  const [state, action, isPending] = useActionState(
+    actionsMap[mode],
     initialState,
   );
 
@@ -31,14 +51,35 @@ export function AdminManagePostForm({ publicPost }: AdminManagePostFormProps) {
     if (state.errors.length > 0) {
       state.errors.forEach((error) => toast.error(error));
     }
+    if (state.errors.length <= 0) {
+      toast.success('Post atualizado com sucesso');
+    }
   }, [state.errors]);
 
   const { formState } = state;
   const [contentValue, setContentValue] = useState(publicPost?.content || '');
 
   return (
-    <form action={createPost} className="mb-16">
+    <form action={action} className="mb-16">
       <div className="flex flex-col gap-6">
+        <InputText
+          maxLength={36}
+          name="id"
+          labeltext={mode === 'create' ? '' : 'ID'}
+          type={mode === 'create' ? 'hidden' : 'text'}
+          value={publicPost ? publicPost.id : ''}
+          readOnly
+          disabled={isPending}
+        ></InputText>
+        <InputText
+          maxLength={36}
+          name="slug"
+          labeltext={mode === 'create' ? '' : 'Slug'}
+          type={mode === 'create' ? 'hidden' : 'text'}
+          value={publicPost ? publicPost.slug : ''}
+          readOnly
+          disabled={isPending}
+        ></InputText>
         <InputText
           maxLength={32}
           labeltext="Título"
@@ -52,6 +93,7 @@ export function AdminManagePostForm({ publicPost }: AdminManagePostFormProps) {
           name="excerpt"
           placeholder="Digite o resumo"
           defaultValue={formState.excerpt}
+          disabled={isPending}
         />
         <InputText
           maxLength={32}
@@ -59,22 +101,32 @@ export function AdminManagePostForm({ publicPost }: AdminManagePostFormProps) {
           name="author"
           placeholder="Digite o nome do autor"
           defaultValue={formState.author}
+          disabled={isPending}
         />
-        <ImageUploader imageUrl={formState.coverImageUrl} />
+        <ImageUploader
+          imageUrl={formState.coverImageUrl}
+          disabled={isPending}
+        />
         <MarkdownEditor
           labelText="Conteúdo"
           value={contentValue}
           setValue={setContentValue}
           textareaName="content"
-          disabled={false}
+          disabled={isPending}
         />
-        <InputCheckbox name="published" labeltext="Publicar?" />
+        <InputCheckbox
+          name="published"
+          labeltext="Publicar?"
+          disabled={isPending}
+        />
         {!!publicPost && (
-          <Button variant="danger" type="button">
+          <Button variant="danger" type="button" disabled={isPending}>
             Excluir
           </Button>
         )}
-        <Button type="submit">Salvar</Button>
+        <Button type="submit" disabled={isPending}>
+          Salvar
+        </Button>
       </div>
     </form>
   );

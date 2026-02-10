@@ -11,10 +11,14 @@ import { useRef, useState, useTransition } from 'react';
 import { toast } from 'react-toastify';
 
 type ImageUploaderProps = {
+  disabled?: boolean;
   imageUrl?: string;
 };
 
-export function ImageUploader({ imageUrl: prevImageUrl }: ImageUploaderProps) {
+export function ImageUploader({
+  imageUrl: prevImageUrl,
+  disabled = false,
+}: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, startTransition] = useTransition();
   const [imgUrl, setImgUrl] = useState(prevImageUrl || '');
@@ -77,7 +81,7 @@ export function ImageUploader({ imageUrl: prevImageUrl }: ImageUploaderProps) {
         variant="ghost"
         type="button"
         onClick={handleChooseFile}
-        disabled={isUploading}
+        disabled={isUploading || disabled}
       >
         <ImageUpIcon />
         Enviar imagem de capa

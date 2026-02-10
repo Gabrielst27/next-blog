@@ -3,6 +3,7 @@
 import { createPostAction } from '@/actions/post/create-post-action';
 import { deletePostAction } from '@/actions/post/delete-post.action';
 import { updatePostAction } from '@/actions/post/update-post-action';
+import { AdminDeletePostButton } from '@/components/admin/AdminDeletePostButton';
 import { Button } from '@/components/Button';
 import { ImageUploader } from '@/components/ImageUploader';
 import { InputCheckbox } from '@/components/InputCheckbox';
@@ -142,16 +143,6 @@ export function AdminManagePostForm(props: AdminManagePostFormProps) {
           defaultChecked={formState.published}
           disabled={isPending}
         />
-        {!!publicPost && (
-          <Button
-            variant="danger"
-            type="button"
-            disabled={isPending}
-            onClick={() => deletePostAction(publicPost.id)}
-          >
-            Excluir
-          </Button>
-        )}
         <Button type="submit" disabled={isPending}>
           Salvar
         </Button>

@@ -4,7 +4,6 @@ import { ActionResult } from '@/dto/post/action-result.dto';
 import { PostModel } from '@/models/post.model';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function deletePostAction(id: string): Promise<ActionResult> {
   //TODO: check user login before deletion
@@ -35,5 +34,8 @@ export async function deletePostAction(id: string): Promise<ActionResult> {
   revalidateTag(`post-admin-${id}`, 'max');
   revalidateTag('posts', 'max');
   revalidateTag(`post-${post.slug}`, 'max');
-  redirect('/admin/post');
+  return {
+    error: '',
+    successMessage: `Post "${post.title}" deletado com sucesso!`,
+  };
 }

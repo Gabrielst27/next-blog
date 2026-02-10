@@ -12,6 +12,7 @@ import {
   makePartialPublicPost,
   PublicPostDto,
 } from '@/dto/post/public-post.dto';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -28,6 +29,10 @@ type AdminManagePostFormProps =
 
 export function AdminManagePostForm(props: AdminManagePostFormProps) {
   const { mode } = props;
+  const searchParams = useSearchParams();
+  const created = searchParams.get('created');
+  const router = useRouter();
+
   let publicPost;
   if (props.mode === 'update') {
     publicPost = props.publicPost;
@@ -50,15 +55,28 @@ export function AdminManagePostForm(props: AdminManagePostFormProps) {
 
   useEffect(() => {
     if (state.errors.length > 0) {
+      toast.dismiss();
       state.errors.forEach((error) => toast.error(error));
     }
   }, [state.errors]);
+
   useEffect(() => {
     if (state.success) {
+      toast.dismiss();
       toast.success('Post atualizado com sucesso');
       state.success = undefined;
     }
-  }, [state]);
+  }, [state.success]);
+
+  useEffect(() => {
+    if (created === '1') {
+      toast.dismiss();
+      toast.success('Post criado com sucesso');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('created');
+      router.replace(url.toString());
+    }
+  }, [created, router]);
 
   const { formState } = state;
   const [contentValue, setContentValue] = useState(publicPost?.content || '');

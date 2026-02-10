@@ -5,8 +5,11 @@ import {
   PublicPostDto,
 } from '@/dto/post/public-post.dto';
 import { PostCreateSchema } from '@/lib/posts/validation';
+import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
 import { makeSlug } from '@/utils/make-slug';
+import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { v4 as uuidV4 } from 'uuid';
 
 interface CreatePostActionState {
@@ -47,8 +50,21 @@ export async function createPostAction(
     id: uuidV4(),
   };
 
-  return {
-    formState: newPost,
-    errors: [],
-  };
+  try {
+    await drizzlePostRepository.create(newPost);
+    revalidateTag('posts', 'max');
+    revalidateTag('posts-admin', 'max');
+    redirect(`/admin/post?${newPost.id}`);
+  } catch (e) {
+    if (e instanceof Error) {
+      return {
+        formState: newPost,
+        errors: [e.message],
+      };
+    }
+    return {
+      formState: newPost,
+      errors: ['[ERR-003]: Por favor, contate o suporte'],
+    };
+  }
 }

@@ -1,26 +1,35 @@
 'use server';
 
 import { ActionResult } from '@/dto/post/action-result.dto';
+import { PostModel } from '@/models/post.model';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { revalidateTag } from 'next/cache';
 
 export async function deletePostAction(id: string): Promise<ActionResult> {
   //TODO: check user login before deletion
   //TODO: implement post deletion
-  const post = await drizzlePostRepository.findById(id).catch(() => undefined);
-  if (!post) {
-    return {
-      error: 'Post não encontrado ou já excluído.',
-      successMessage: '',
-    };
-  }
   if (!id || typeof id !== 'string') {
     return {
-      error: 'Erro interno ER-001. Contate o suporte.',
+      error: '[ERR-005]: Por favor, contate o suporte',
       successMessage: '',
     };
   }
-  await drizzlePostRepository.deleteById(id);
+  let post: PostModel | undefined = undefined;
+  try {
+    post = await drizzlePostRepository.deleteById(id);
+  } catch (e) {
+    if (e instanceof Error) {
+      return {
+        error: e.message,
+        successMessage: '',
+      };
+    }
+    return {
+      error: '[ERR-004]: Por favor, contate o suporte',
+      successMessage: '',
+    };
+  }
+
   revalidateTag('posts-admin', 'max');
   revalidateTag(`post-admin-${id}`, 'max');
   revalidateTag('posts', 'max');

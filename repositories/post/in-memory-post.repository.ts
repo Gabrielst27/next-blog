@@ -9,6 +9,17 @@ const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'db', 'seed', 'posts.json');
 
 export class InMemoryPostRepository implements IPostRepository {
+  create(post: PostModel): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  update(post: PostModel): Promise<PostModel> {
+    throw new Error('method not implemented');
+  }
+
+  deleteById(id: string): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
   private async readFromDisk(): Promise<PostModel[]> {
     const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
     const parsedJson = JSON.parse(jsonContent);

@@ -15,6 +15,7 @@ import { v4 as uuidV4 } from 'uuid';
 interface CreatePostActionState {
   formState: PublicPostDto;
   errors: string[];
+  success?: string;
 }
 
 export async function createPostAction(
@@ -54,7 +55,6 @@ export async function createPostAction(
     await drizzlePostRepository.create(newPost);
     revalidateTag('posts', 'max');
     revalidateTag('posts-admin', 'max');
-    redirect(`/admin/post?${newPost.id}`);
   } catch (e) {
     if (e instanceof Error) {
       return {
@@ -67,4 +67,6 @@ export async function createPostAction(
       errors: ['[ERR-003]: Por favor, contate o suporte'],
     };
   }
+
+  redirect(`/admin/post/${newPost.id}`);
 }

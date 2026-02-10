@@ -7,11 +7,13 @@ import {
 import { PostUpdateSchema } from '@/lib/posts/validation';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
+import { makeSlug } from '@/utils/make-slug';
 import { revalidateTag } from 'next/cache';
 
 interface UpdatePostActionState {
   formState: PublicPostDto;
   errors: string[];
+  success?: string;
 }
 
 export async function updatePostAction(
@@ -54,6 +56,7 @@ export async function updatePostAction(
     return {
       formState: newPost,
       errors: [],
+      success: makeSlug(newPost.updatedAt),
     };
   } catch (e) {
     if (e instanceof Error) {

@@ -51,10 +51,13 @@ export function AdminManagePostForm(props: AdminManagePostFormProps) {
     if (state.errors.length > 0) {
       state.errors.forEach((error) => toast.error(error));
     }
-    if (state.errors.length <= 0) {
-      toast.success('Post atualizado com sucesso');
-    }
   }, [state.errors]);
+  useEffect(() => {
+    if (state.success) {
+      toast.success('Post atualizado com sucesso');
+      state.success = undefined;
+    }
+  }, [state]);
 
   const { formState } = state;
   const [contentValue, setContentValue] = useState(publicPost?.content || '');

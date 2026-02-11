@@ -11,6 +11,7 @@ const loginExpSeconds = Number(process.env.JWT_EXPIRES_IN_SECONDS || 86400);
 const loginExpDays = process.env.JWT_EXPIRES_IN_DAYS || '1d';
 const loginCookieName = process.env.LOGIN_COOKIE_NAME || 'loginSession';
 const loginUser = process.env.LOGIN_USER;
+const allowLogin = Boolean(Number(process.env.ALLOW_LOGIN || 0));
 
 type JwtPayload = {
   username: string;
@@ -30,7 +31,7 @@ export async function verifyPassword(password: string, base64Hash: string) {
   return isValid;
 }
 
-export async function signJwt(jwtPayload: JwtPayload) {
+async function signJwt(jwtPayload: JwtPayload) {
   return new SignJWT(jwtPayload)
     .setProtectedHeader({
       alg: 'HS256',
@@ -74,6 +75,7 @@ export async function requireLoginSessionOrRedirect() {
 }
 
 export async function createLoginSession(username: string) {
+  if (!allowLogin) return;
   const expiresAt = new Date(Date.now() + loginExpSeconds * 1000);
   const loginSession = await signJwt({ username, role: 'admin', expiresAt });
   const cookieStore = await cookies();

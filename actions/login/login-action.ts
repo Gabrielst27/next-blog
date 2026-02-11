@@ -1,6 +1,10 @@
 'use server';
 
-import { createLoginSession, verifyPassword } from '@/lib/login/manage-login';
+import {
+  createLoginSession,
+  verifyLoginSession,
+  verifyPassword,
+} from '@/lib/login/manage-login';
 import { asyncDelay } from '@/utils/simulate-delay';
 import { redirect } from 'next/navigation';
 
@@ -10,6 +14,13 @@ type LoginActionState = {
 };
 
 export async function loginAction(state: LoginActionState, formData: FormData) {
+  const allowLogin = Boolean(Number(process.env.ALLOW_LOGIN || 0));
+  if (!allowLogin)
+    return {
+      username: '',
+      error:
+        'O sistema está em manutenção no momento. Por favor, tente novamente mais tarde.',
+    };
   await asyncDelay(1000, true);
 
   if (!(formData instanceof FormData)) {
@@ -43,5 +54,12 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
   }
 
   await createLoginSession(username);
-  redirect('/admin/post');
+  const isAuthenticated = await verifyLoginSession();
+  if (isAuthenticated) {
+    redirect('/admin/post');
+  }
+  return {
+    username,
+    error: '[ERR-008]: Erro de autenticação. Por favor, contate o suporte.',
+  };
 }

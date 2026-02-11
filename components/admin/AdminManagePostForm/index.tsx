@@ -1,9 +1,7 @@
 'use client';
 
 import { createPostAction } from '@/actions/post/create-post-action';
-import { deletePostAction } from '@/actions/post/delete-post.action';
 import { updatePostAction } from '@/actions/post/update-post-action';
-import { AdminDeletePostButton } from '@/components/admin/AdminDeletePostButton';
 import { Button } from '@/components/Button';
 import { ImageUploader } from '@/components/ImageUploader';
 import { InputCheckbox } from '@/components/InputCheckbox';

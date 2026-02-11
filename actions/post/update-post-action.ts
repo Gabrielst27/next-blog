@@ -4,6 +4,7 @@ import {
   makePartialPublicPost,
   PublicPostDto,
 } from '@/dto/post/public-post.dto';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 import { PostUpdateSchema } from '@/lib/posts/validation';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { getZodErrorMessages } from '@/utils/get-zod-error-messages';
@@ -20,7 +21,8 @@ export async function updatePostAction(
   prevState: UpdatePostActionState,
   formData: FormData,
 ): Promise<UpdatePostActionState> {
-  //TODO: verificar login do usuário
+  const isAuthenticated = await verifyLoginSession();
+
   if (!(formData instanceof FormData)) {
     return {
       formState: prevState.formState,
@@ -36,6 +38,13 @@ export async function updatePostAction(
   }
   const formDataObject = Object.fromEntries(formData.entries());
   const zodParsedObject = PostUpdateSchema.safeParse(formDataObject);
+
+  if (!isAuthenticated) {
+    return {
+      formState: makePartialPublicPost(formDataObject),
+      errors: ['Faça login em outra aba antes de salvar'],
+    };
+  }
 
   if (!zodParsedObject.success) {
     const errors = getZodErrorMessages(zodParsedObject.error);

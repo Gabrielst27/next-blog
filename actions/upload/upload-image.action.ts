@@ -8,7 +8,6 @@ import {
 } from '@/lib/constants';
 import { extname, resolve } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
-import { asyncDelay } from '@/utils/simulate-delay';
 
 interface UploadImageResult extends ActionResult {
   url: string;

@@ -2,12 +2,10 @@ import { drizzleDb } from '@/db/drizzle';
 import { postsTable } from '@/db/drizzle/schemas';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from '@/repositories/post/post.repository.interface';
-import { formatLog } from '@/utils/format-log';
 import { eq } from 'drizzle-orm';
 
 export class DrizzleRepository implements IPostRepository {
   async findAllPublished(): Promise<PostModel[]> {
-    formatLog('findAllPublished');
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
       where: (posts, { eq }) => eq(posts.published, true),
@@ -16,7 +14,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findAll(): Promise<PostModel[]> {
-    formatLog('findAll');
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
     });
@@ -24,7 +21,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    formatLog('findById');
     const post = await drizzleDb.query.posts.findFirst({
       orderBy: (post, { desc }) => desc(post.createdAt),
       where: (post, { eq }) => eq(post.id, id),
@@ -34,7 +30,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async findPublishedBySlug(slug: string): Promise<PostModel> {
-    formatLog('findPublishedBySlug');
     const post = await drizzleDb.query.posts.findFirst({
       orderBy: (post, { desc }) => desc(post.createdAt),
       where: (post, { eq, and }) =>
@@ -94,7 +89,6 @@ export class DrizzleRepository implements IPostRepository {
   }
 
   async deleteById(id: string): Promise<PostModel> {
-    formatLog('deleteById');
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });

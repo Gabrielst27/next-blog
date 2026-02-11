@@ -2,19 +2,20 @@ import { resolve } from 'path';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from './post.repository.interface';
 import { readFile } from 'fs/promises';
-import { asyncDelay } from '@/utils/simulate-delay';
 import { DELAY_SIMULATION_MS } from '@/lib/constants';
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'db', 'seed', 'posts.json');
 
 export class InMemoryPostRepository implements IPostRepository {
-  create(post: PostModel): Promise<void> {
+  update(
+    id: string,
+    newPost: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+  ): Promise<PostModel> {
     throw new Error('Method not implemented.');
   }
-
-  update(post: PostModel): Promise<PostModel> {
-    throw new Error('method not implemented');
+  create(post: PostModel): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   deleteById(id: string): Promise<PostModel> {
@@ -33,7 +34,6 @@ export class InMemoryPostRepository implements IPostRepository {
   }
 
   async findAllPublished(): Promise<PostModel[]> {
-    await asyncDelay(DELAY_SIMULATION_MS);
     const posts = await this.readFromDisk();
     return posts.filter((post) => post.published);
   }

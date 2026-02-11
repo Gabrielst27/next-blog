@@ -1,7 +1,8 @@
 'use server';
 
-import { verifyPassword } from '@/lib/login/manage-login';
+import { createLoginSession, verifyPassword } from '@/lib/login/manage-login';
 import { asyncDelay } from '@/utils/simulate-delay';
+import { redirect } from 'next/navigation';
 
 type LoginActionState = {
   username: string;
@@ -19,21 +20,28 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
   }
 
   const username = formData.get('username')?.toString().trim() || '';
-  const isUsernameValid = username === process.env.LOGIN_USER;
-
   const password = formData.get('password')?.toString().trim() || '';
-  const systemPassword = process.env.LOGIN_PASS?.toString() || '';
-  const isPasswordValid = await verifyPassword(password, systemPassword);
+
+  if (!username || !password) {
+    return {
+      username,
+      error: 'Todos os campos de login devem estar preenchidos',
+    };
+  }
+
+  const isUsernameValid = username === process.env.LOGIN_USER;
+  const isPasswordValid = await verifyPassword(
+    password,
+    process.env.LOGIN_PASS?.toString() || '',
+  );
 
   if (!isUsernameValid || !isPasswordValid) {
     return {
-      username: username,
+      username,
       error: 'Nome de usuário ou senha incorretos',
     };
   }
 
-  return {
-    username: username,
-    error: '',
-  };
+  await createLoginSession(username);
+  redirect('/admin/post');
 }

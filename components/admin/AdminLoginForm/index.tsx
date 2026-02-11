@@ -42,7 +42,11 @@ export function AdminLoginForm() {
             placeholder="Digite sua senha"
             disabled={isPending}
           />
-          <Button className="flex gap-2" type="submit">
+          <Button
+            className="mt-6 flex gap-2"
+            type="submit"
+            disabled={isPending}
+          >
             <LogInIcon />
             <p>Entrar</p>
           </Button>

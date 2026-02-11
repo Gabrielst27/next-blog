@@ -1,4 +1,12 @@
 import bcrypt from 'bcryptjs';
+import { cookies } from 'next/headers';
+
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+const jwtEncodedKey = new TextEncoder().encode(jwtSecretKey);
+
+const loginExpSeconds = Number(process.env.JWT_EXPIRES_IN_SECONDS || 86400);
+const loginExpDays = process.env.JWT_EXPIRES_IN_DAYS || '1d';
+const loginCookieName = process.env.LOGIN_COOKIE_NAME || 'loginSession';
 
 export async function generateHash(password: string) {
   const hash = await bcrypt.hash(password, 10);
@@ -10,4 +18,23 @@ export async function verifyPassword(password: string, base64Hash: string) {
   const hash = Buffer.from(base64Hash, 'base64').toString('utf-8');
   const isValid = await bcrypt.compare(password, hash);
   return isValid;
+}
+
+export async function createLoginSession(username: string) {
+  const expiresAt = new Date(Date.now() + loginExpSeconds * 1000);
+  const loginSession = 'jwt';
+  const cookieStore = await cookies();
+
+  cookieStore.set(loginCookieName, loginSession, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    expires: expiresAt,
+  });
+}
+
+export async function deleteLoginSession() {
+  const cookieStore = await cookies();
+  cookieStore.set(loginCookieName, '', { expires: new Date(0) });
+  cookieStore.delete(loginCookieName);
 }

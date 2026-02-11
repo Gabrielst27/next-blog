@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -7,6 +8,12 @@ const jwtEncodedKey = new TextEncoder().encode(jwtSecretKey);
 const loginExpSeconds = Number(process.env.JWT_EXPIRES_IN_SECONDS || 86400);
 const loginExpDays = process.env.JWT_EXPIRES_IN_DAYS || '1d';
 const loginCookieName = process.env.LOGIN_COOKIE_NAME || 'loginSession';
+
+type JwtPayload = {
+  username: string;
+  role: 'admin' | 'user';
+  expiresAt: Date;
+};
 
 export async function generateHash(password: string) {
   const hash = await bcrypt.hash(password, 10);
@@ -20,9 +27,20 @@ export async function verifyPassword(password: string, base64Hash: string) {
   return isValid;
 }
 
+export async function signJwt(jwtPayload: JwtPayload) {
+  return new SignJWT(jwtPayload)
+    .setProtectedHeader({
+      alg: 'HS256',
+      typ: 'JWT',
+    })
+    .setIssuedAt()
+    .setExpirationTime(loginExpDays)
+    .sign(jwtEncodedKey);
+}
+
 export async function createLoginSession(username: string) {
   const expiresAt = new Date(Date.now() + loginExpSeconds * 1000);
-  const loginSession = 'jwt';
+  const loginSession = await signJwt({ username, role: 'admin', expiresAt });
   const cookieStore = await cookies();
 
   cookieStore.set(loginCookieName, loginSession, {

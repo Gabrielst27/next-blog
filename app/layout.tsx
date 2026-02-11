@@ -3,6 +3,9 @@ import './globals.css';
 import { ContainerComponent } from '@/components/Container';
 import { HeaderComponent } from '@/components/Header';
 import { FooterComponent } from '@/components/Footer';
+import { NavigationMenu } from '@/components/NavigationMenu';
+import { Suspense } from 'react';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 export const metadata: Metadata = {
   title: {
@@ -22,6 +25,9 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
       <body>
         <ContainerComponent>
           <HeaderComponent />
+          <Suspense fallback={<LoadingSpinner />}>
+            <NavigationMenu />
+          </Suspense>
           {children}
           <FooterComponent />
         </ContainerComponent>

@@ -1,0 +1,152 @@
+'use client';
+
+import { createPostAction } from '@/actions/post/create-post-action';
+import { deletePostAction } from '@/actions/post/delete-post.action';
+import { updatePostAction } from '@/actions/post/update-post-action';
+import { AdminDeletePostButton } from '@/components/admin/AdminDeletePostButton';
+import { Button } from '@/components/Button';
+import { ImageUploader } from '@/components/ImageUploader';
+import { InputCheckbox } from '@/components/InputCheckbox';
+import { InputText } from '@/components/InputText';
+import { MarkdownEditor } from '@/components/MarkdownEditor';
+import {
+  makePartialPublicPost,
+  PublicPostDto,
+} from '@/dto/post/public-post.dto';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useActionState, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
+type AdminManagePostFormUpdateProps = {
+  mode: 'update';
+  publicPost: PublicPostDto;
+};
+type AdminManagePostFormCreateProps = {
+  mode: 'create';
+};
+type AdminManagePostFormProps =
+  | AdminManagePostFormUpdateProps
+  | AdminManagePostFormCreateProps;
+
+export function AdminManagePostForm(props: AdminManagePostFormProps) {
+  const { mode } = props;
+  const searchParams = useSearchParams();
+  const created = searchParams.get('created');
+  const router = useRouter();
+
+  let publicPost;
+  if (props.mode === 'update') {
+    publicPost = props.publicPost;
+  }
+
+  const actionsMap = {
+    update: updatePostAction,
+    create: createPostAction,
+  };
+
+  const initialState = {
+    formState: makePartialPublicPost(publicPost),
+    errors: [],
+  };
+
+  const [state, action, isPending] = useActionState(
+    actionsMap[mode],
+    initialState,
+  );
+
+  useEffect(() => {
+    if (state.errors.length > 0) {
+      toast.dismiss();
+      state.errors.forEach((error) => toast.error(error));
+    }
+  }, [state.errors]);
+
+  useEffect(() => {
+    if (state.success) {
+      toast.dismiss();
+      toast.success('Post atualizado com sucesso');
+      state.success = undefined;
+    }
+  }, [state.success]);
+
+  useEffect(() => {
+    if (created === '1') {
+      toast.dismiss();
+      toast.success('Post criado com sucesso');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('created');
+      router.replace(url.toString());
+    }
+  }, [created, router]);
+
+  const { formState } = state;
+  const [contentValue, setContentValue] = useState(publicPost?.content || '');
+
+  return (
+    <form action={action} className="mb-16">
+      <div className="flex flex-col gap-6">
+        <InputText
+          maxLength={36}
+          name="id"
+          labeltext={mode === 'create' ? '' : 'ID'}
+          type={mode === 'create' ? 'hidden' : 'text'}
+          value={publicPost ? publicPost.id : ''}
+          readOnly
+          disabled={isPending}
+        ></InputText>
+        <InputText
+          maxLength={36}
+          name="slug"
+          labeltext={mode === 'create' ? '' : 'Slug'}
+          type={mode === 'create' ? 'hidden' : 'text'}
+          value={publicPost ? publicPost.slug : ''}
+          readOnly
+          disabled={isPending}
+        ></InputText>
+        <InputText
+          maxLength={32}
+          labeltext="Título"
+          name="title"
+          placeholder="Digite o título"
+          defaultValue={formState.title}
+        />
+        <InputText
+          maxLength={32}
+          labeltext="Excerto"
+          name="excerpt"
+          placeholder="Digite o resumo"
+          defaultValue={formState.excerpt}
+          disabled={isPending}
+        />
+        <InputText
+          maxLength={32}
+          labeltext="Autor"
+          name="author"
+          placeholder="Digite o nome do autor"
+          defaultValue={formState.author}
+          disabled={isPending}
+        />
+        <ImageUploader
+          imageUrl={formState.coverImageUrl}
+          disabled={isPending}
+        />
+        <MarkdownEditor
+          labelText="Conteúdo"
+          value={contentValue}
+          setValue={setContentValue}
+          textareaName="content"
+          disabled={isPending}
+        />
+        <InputCheckbox
+          name="published"
+          labeltext="Publicar?"
+          defaultChecked={formState.published}
+          disabled={isPending}
+        />
+        <Button type="submit" disabled={isPending}>
+          Salvar
+        </Button>
+      </div>
+    </form>
+  );
+}

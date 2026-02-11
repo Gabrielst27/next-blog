@@ -2,12 +2,25 @@ import { resolve } from 'path';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from './post.repository.interface';
 import { readFile } from 'fs/promises';
+import { DELAY_SIMULATION_MS } from '@/lib/constants';
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'db', 'seed', 'posts.json');
-const WAITING_SIMULATION_MS = 0;
 
 export class InMemoryPostRepository implements IPostRepository {
+  update(
+    id: string,
+    newPost: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
+  ): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
+  create(post: PostModel): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteById(id: string): Promise<PostModel> {
+    throw new Error('Method not implemented.');
+  }
   private async readFromDisk(): Promise<PostModel[]> {
     const jsonContent = await readFile(JSON_POSTS_FILE_PATH, 'utf-8');
     const parsedJson = JSON.parse(jsonContent);
@@ -15,13 +28,12 @@ export class InMemoryPostRepository implements IPostRepository {
     return posts;
   }
 
-  private async simulateWait() {
-    if (WAITING_SIMULATION_MS <= 0) return;
-    await new Promise((resolve) => setTimeout(resolve, WAITING_SIMULATION_MS));
+  async findAll(): Promise<PostModel[]> {
+    const posts = await this.readFromDisk();
+    return posts;
   }
 
   async findAllPublished(): Promise<PostModel[]> {
-    await this.simulateWait();
     const posts = await this.readFromDisk();
     return posts.filter((post) => post.published);
   }

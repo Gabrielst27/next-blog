@@ -1,9 +1,11 @@
 import clsx from 'clsx';
-import { findAllPublishedPostsCached } from '@/lib/posts/queries';
-import { PostComponent } from '@/components/PostItem';
+import { findAllPublicPostsCached } from '@/lib/posts/queries/public';
+import { PostItem } from '@/components/PostItem';
+import { Suspense } from 'react';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 export async function PostsListComponent() {
-  const posts = (await findAllPublishedPostsCached()).slice(1);
+  const posts = (await findAllPublicPostsCached()).slice(1);
   return (
     <section
       className={clsx(
@@ -15,7 +17,11 @@ export async function PostsListComponent() {
       )}
     >
       {posts.map((post) => {
-        return <PostComponent post={post} key={post.id} />;
+        return (
+          <Suspense key={post.id} fallback={<LoadingSpinner />}>
+            <PostItem post={post} />
+          </Suspense>
+        );
       })}
     </section>
   );

@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+tests
 
 # next.js
 /.next/
@@ -42,7 +43,11 @@ next-env.d.ts
 
 # ide
 .prettierrc
+.vscode
 
 # db files
 db.sqlite3
 drizzle.config.js
+
+# uploads
+uploads/

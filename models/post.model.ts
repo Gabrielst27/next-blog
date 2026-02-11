@@ -1,5 +1,6 @@
-export type PostModel = {
-  id: string;
+import { Model } from '@/models/model';
+
+export interface PostModel extends Model {
   title: string;
   slug: string;
   excerpt: string;
@@ -9,4 +10,4 @@ export type PostModel = {
   createdAt: string;
   updatedAt: string;
   author: string;
-};
+}

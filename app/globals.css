@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@layer utilities {
+  @safelist hidden, flex, block, inline-block, grid, absolute, relative, fixed;
+}
 
 :root {
   --background: #ffffff;

@@ -5,7 +5,7 @@ type SpinnnerContainerProps = {
   spinnerClasses?: string;
 };
 
-export function LoadingSpinnerComponent({
+export function LoadingSpinner({
   containerClasses = '',
   spinnerClasses = '',
 }: SpinnnerContainerProps) {

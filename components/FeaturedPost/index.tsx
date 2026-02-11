@@ -1,11 +1,21 @@
 import clsx from 'clsx';
-import { findAllPublishedPostsCached } from '@/lib/posts/queries';
+import { findAllPublicPostsCached } from '@/lib/posts/queries/public';
 import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
 import { PostHeadingComponent } from '@/components/PostItemHeading';
+import { formatDatetime } from '@/utils/format-datetime';
+import { ErrorMessageComponent } from '@/components/ErrorMessage';
 
 export async function FeaturedPost() {
-  const posts = await findAllPublishedPostsCached();
-  const featuredPost = posts[0];
+  const posts = await findAllPublicPostsCached();
+  if (posts.length <= 0) {
+    return (
+      <ErrorMessageComponent
+        contentTitle="Oops..."
+        content="Ainda não postamos nada nesta página."
+      />
+    );
+  }
+  const featuredPost = posts.length > 0 ? posts[0] : undefined;
   return (
     <section className="grid grid-cols-1 gap-6">
       <h1
@@ -17,37 +27,42 @@ export async function FeaturedPost() {
       >
         Em destaque:
       </h1>
-      <div
-        className={clsx(
-          'grid grid-cols-1 gap-8 mb-16 group',
-          'sm:grid-cols-2',
-          'rounded-2xl',
-          'p-4',
-        )}
-      >
-        <PostCoverImageComponent
-          linkProps={{ href: `post/${featuredPost.slug}` }}
-          imageProps={{
-            width: 1200,
-            height: 720,
-            alt: featuredPost.title,
-            src: featuredPost.coverImageUrl,
-            priority: true,
-          }}
-        />
+      {featuredPost && (
+        <div
+          className={clsx(
+            'grid grid-cols-1 gap-8 group',
+            'sm:grid-cols-2',
+            'rounded-2xl',
+            'p-4 mb-16',
+          )}
+        >
+          <PostCoverImageComponent
+            linkProps={{ href: `post/${featuredPost.slug}` }}
+            imageProps={{
+              width: 1200,
+              height: 720,
+              alt: featuredPost.title,
+              src: featuredPost.coverImageUrl,
+              priority: true,
+            }}
+          />
 
-        <div className={clsx('flex flex-col gap-2 justify-center')}>
-          <time className="text-slate-500 text-sm/tight" dateTime="2025-01-20">
-            20/01/2026 19:32
-          </time>
+          <div className={clsx('flex flex-col gap-2 justify-center')}>
+            <time
+              className="text-slate-500 text-sm/tight"
+              dateTime={featuredPost.createdAt}
+            >
+              {formatDatetime(featuredPost.createdAt)}
+            </time>
 
-          <PostHeadingComponent url={`post/${featuredPost.slug}`}>
-            {featuredPost.title}
-          </PostHeadingComponent>
+            <PostHeadingComponent url={`post/${featuredPost.slug}`}>
+              {featuredPost.title}
+            </PostHeadingComponent>
 
-          <p>{featuredPost.excerpt}</p>
+            <p>{featuredPost.excerpt}</p>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

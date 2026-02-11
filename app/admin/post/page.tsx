@@ -1,5 +1,6 @@
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { AdminPostsList } from '@/components/admin/AdminPostsList';
+import { AdminProtectedContent } from '@/components/admin/AdminProtectedContent';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -11,7 +12,9 @@ export default async function AdminPostPage() {
   return (
     <section>
       <Suspense fallback={<LoadingSpinner />}>
-        <AdminPostsList />
+        <AdminProtectedContent>
+          <AdminPostsList />
+        </AdminProtectedContent>
       </Suspense>
     </section>
   );

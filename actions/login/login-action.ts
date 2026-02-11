@@ -18,9 +18,9 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
   if (!allowLogin)
     return {
       username: '',
-      error:
-        'O sistema está em manutenção no momento. Por favor, tente novamente mais tarde.',
+      error: 'Sistema em manutenção. Por favor, tente novamente mais tarde.',
     };
+
   await asyncDelay(1000, true);
 
   if (!(formData instanceof FormData)) {

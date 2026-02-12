@@ -3,6 +3,7 @@
 import { ActionResult } from '@/dto/post/action-result.dto';
 import { extname, resolve } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 
 interface UploadImageResult extends ActionResult {
   url: string;
@@ -11,13 +12,16 @@ interface UploadImageResult extends ActionResult {
 export async function uploadImageAction(
   formData: FormData,
 ): Promise<UploadImageResult> {
-  //TODO: Verificar login do usuário
-
   const makeResult = ({ url = '', error = '', successMessage = '' }) => ({
     url,
     error,
     successMessage,
   });
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    return makeResult({ error: 'Faça login em outra aba para continuar' });
+  }
 
   if (!(formData instanceof FormData)) {
     return makeResult({ error: 'Dados inválidos' });

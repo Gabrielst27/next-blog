@@ -3,13 +3,13 @@ import { findAllPublicPostsCached } from '@/lib/posts/queries/public';
 import { PostCoverImageComponent } from '@/components/PostItemCoverImage';
 import { PostHeadingComponent } from '@/components/PostItemHeading';
 import { formatDatetime } from '@/utils/format-datetime';
-import { ErrorMessageComponent } from '@/components/ErrorMessage';
+import { ErrorMessage } from '@/components/ErrorMessage';
 
 export async function FeaturedPost() {
   const posts = await findAllPublicPostsCached();
   if (posts.length <= 0) {
     return (
-      <ErrorMessageComponent
+      <ErrorMessage
         contentTitle="Oops..."
         content="Ainda não postamos nada nesta página."
       />

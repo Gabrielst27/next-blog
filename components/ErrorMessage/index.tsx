@@ -6,10 +6,7 @@ type ErrorMessageProps = {
   content: React.ReactNode;
 };
 
-export function ErrorMessageComponent({
-  contentTitle,
-  content,
-}: ErrorMessageProps) {
+export function ErrorMessage({ contentTitle, content }: ErrorMessageProps) {
   return (
     <div
       className={clsx(

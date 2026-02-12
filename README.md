@@ -1,4 +1,4 @@
-## Configurando banco de dados
+# Configurando banco de dados
 
 Adicione na pasta raiz o arquivo `drizzle.config.js`, e insira as configurações do seu banco de dados no seguinte formato:
 
@@ -18,7 +18,7 @@ export default defineConfig({
 
 Feito isso, basta rodar uma migration ou iniciar a aplicação que o arquivo do banco de dados será adicionado no caminho especificado em url.
 
-## Comandos do drizzle-kit
+### Comandos do drizzle-kit
 
 - Salvar migration:
 
@@ -31,3 +31,21 @@ npx drizzle-kit generate
 ```bash
 npx drizzle-kit migrate
 ```
+
+# Configurando site
+
+Comandos para iniciar o site:
+
+```sh
+# NECESSÁRIO TER O NODE INSTALADO!
+npm i
+npm run migrate
+npm run build
+npm start # Apenas para testes
+```
+
+### Configurações manuais
+
+| Arquivo    | Instrução                                                  |
+| ---------- | ---------------------------------------------------------- |
+| .env.local | Siga o exemplo do arquivo .env.example para a configuração |

@@ -1,11 +1,13 @@
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ProfileContainer } from '@/components/ProfileContainer';
 import { ToastifyContainer } from '@/components/ToastifyContainer';
 import clsx from 'clsx';
-import { Sidebar } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export function HeaderComponent() {
   return (
-    <header className="flex items-center justify-start gap-4 border-b p-4">
+    <header className="flex items-center justify-between border-b p-4">
       <Link
         href="/"
         className={clsx(
@@ -18,6 +20,9 @@ export function HeaderComponent() {
         <h1>Next Blog</h1>
       </Link>
       <ToastifyContainer />
+      <Suspense fallback={<LoadingSpinner />}>
+        <ProfileContainer />
+      </Suspense>
     </header>
   );
 }

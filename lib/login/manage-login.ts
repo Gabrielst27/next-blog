@@ -61,6 +61,12 @@ async function getLoginSession() {
   return verifyJwt(jwt);
 }
 
+export async function getCurrentUsername(): Promise<string | false> {
+  const jwtPayload = await getLoginSession();
+  if (!jwtPayload) return false;
+  return `${jwtPayload?.username} `;
+}
+
 export async function verifyLoginSession() {
   const jwtPayload = await getLoginSession();
   if (!jwtPayload) return false;

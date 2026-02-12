@@ -1,7 +1,9 @@
 'use server';
 
+import { deleteLoginSession } from '@/lib/login/manage-login';
 import { asyncDelay } from '@/utils/simulate-delay';
 
 export async function logoutAction() {
-  asyncDelay(3000);
+  await asyncDelay(3000);
+  await deleteLoginSession();
 }

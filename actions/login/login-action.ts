@@ -21,7 +21,7 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
       error: 'Sistema em manutenção. Por favor, tente novamente mais tarde.',
     };
 
-  await asyncDelay(1000, true);
+  await asyncDelay(3000, true);
 
   if (!(formData instanceof FormData)) {
     return {

@@ -1,4 +1,3 @@
-import { formatLog } from '@/utils/format-log';
 import bcrypt from 'bcryptjs';
 import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
@@ -42,14 +41,13 @@ async function signJwt(jwtPayload: JwtPayload) {
     .sign(jwtEncodedKey);
 }
 
-async function verifyJwt(jwt: string | undefined = '') {
+export async function verifyJwt(jwt: string | undefined = '') {
   try {
     const { payload } = await jwtVerify(jwt, jwtEncodedKey, {
       algorithms: ['HS256'],
     });
     return payload;
   } catch {
-    formatLog(`Invalid token`);
     return false;
   }
 }

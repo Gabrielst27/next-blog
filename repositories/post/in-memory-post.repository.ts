@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import { PostModel } from '@/models/post.model';
 import { IPostRepository } from './post.repository.interface';
 import { readFile } from 'fs/promises';
-import { DELAY_SIMULATION_MS } from '@/lib/constants';
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(ROOT_DIR, 'db', 'seed', 'posts.json');

@@ -1,0 +1,99 @@
+import bcrypt from 'bcryptjs';
+import { jwtVerify, SignJWT } from 'jose';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+const jwtEncodedKey = new TextEncoder().encode(jwtSecretKey);
+
+const loginExpSeconds = Number(process.env.JWT_EXPIRES_IN_SECONDS || 86400);
+const loginExpDays = process.env.JWT_EXPIRES_IN_DAYS || '1d';
+const loginCookieName = process.env.LOGIN_COOKIE_NAME || 'loginSession';
+const loginUser = process.env.LOGIN_USER;
+const allowLogin = Boolean(Number(process.env.ALLOW_LOGIN || 0));
+
+type JwtPayload = {
+  username: string;
+  role: 'admin' | 'user';
+  expiresAt: Date;
+};
+
+export async function generateHash(password: string) {
+  const hash = await bcrypt.hash(password, 10);
+  const base64 = Buffer.from(hash).toString('base64');
+  return base64;
+}
+
+export async function verifyPassword(password: string, base64Hash: string) {
+  const hash = Buffer.from(base64Hash, 'base64').toString('utf-8');
+  const isValid = await bcrypt.compare(password, hash);
+  return isValid;
+}
+
+async function signJwt(jwtPayload: JwtPayload) {
+  return new SignJWT(jwtPayload)
+    .setProtectedHeader({
+      alg: 'HS256',
+      typ: 'JWT',
+    })
+    .setIssuedAt()
+    .setExpirationTime(loginExpDays)
+    .sign(jwtEncodedKey);
+}
+
+export async function verifyJwt(jwt: string | undefined = '') {
+  try {
+    const { payload } = await jwtVerify(jwt, jwtEncodedKey, {
+      algorithms: ['HS256'],
+    });
+    return payload;
+  } catch {
+    return false;
+  }
+}
+
+async function getLoginSession() {
+  const cookieStore = await cookies();
+  const jwt = cookieStore.get(loginCookieName)?.value;
+  if (!jwt) return false;
+  return verifyJwt(jwt);
+}
+
+export async function getCurrentUsername(): Promise<string | false> {
+  const jwtPayload = await getLoginSession();
+  if (!jwtPayload) return false;
+  return `${jwtPayload?.username} `;
+}
+
+export async function verifyLoginSession() {
+  const jwtPayload = await getLoginSession();
+  if (!jwtPayload) return false;
+  return jwtPayload?.username === loginUser;
+}
+
+export async function requireLoginSessionOrRedirect() {
+  const isAuthenticated = await getLoginSession();
+  if (!isAuthenticated) {
+    redirect('/admin/login');
+  }
+}
+
+export async function createLoginSession(username: string) {
+  if (!allowLogin) return;
+  const expiresAt = new Date(Date.now() + loginExpSeconds * 1000);
+  const loginSession = await signJwt({ username, role: 'admin', expiresAt });
+  const cookieStore = await cookies();
+
+  cookieStore.set(loginCookieName, loginSession, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    expires: expiresAt,
+  });
+}
+
+export async function deleteLoginSession() {
+  const cookieStore = await cookies();
+  cookieStore.set(loginCookieName, '', { expires: new Date(0) });
+  cookieStore.delete(loginCookieName);
+}

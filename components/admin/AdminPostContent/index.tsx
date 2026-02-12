@@ -9,7 +9,7 @@ type AdminPostContentProps = {
 
 export async function AdminPostContent({ params }: AdminPostContentProps) {
   const { id } = await params;
-  const post = await findPostByIdAdminCached(id).catch();
+  const post = await findPostByIdAdminCached(id);
   if (!post) notFound();
   const publicPost = makePublicPostFromPostModel(post);
   return (

@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { ClientLoadingSpinner } from '@/components/ClientLoadingSpinner';
 import { Button } from '@/components/Button';
 import { uploadImageAction } from '@/actions/upload/upload-image.action';
-import { MAX_IMAGE_SIZE } from '@/lib/constants';
 import { formatByteToMB } from '@/utils/format-byte';
 import { Copy, ImageUpIcon } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
@@ -40,9 +39,11 @@ export function ImageUploader({
       setImgUrl('');
       return;
     }
-    if (file.size > MAX_IMAGE_SIZE) {
+    const uploadMaxSize =
+      Number(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE) || 1048576;
+    if (file.size > uploadMaxSize) {
       toast.error(
-        `Imagem muito grande. Tamanho máximo permitido: ${formatByteToMB(MAX_IMAGE_SIZE)}MB`,
+        `Imagem muito grande. Tamanho máximo permitido: ${formatByteToMB(uploadMaxSize).toFixed(2)}MB`,
       );
       setImgUrl('');
       fileInput.value = '';

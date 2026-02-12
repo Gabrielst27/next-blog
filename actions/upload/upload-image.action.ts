@@ -1,13 +1,9 @@
 'use server';
 
 import { ActionResult } from '@/dto/post/action-result.dto';
-import {
-  IMAGE_SERVER_URL,
-  IMAGE_UPLOAD_DIRECTORY,
-  MAX_IMAGE_SIZE,
-} from '@/lib/constants';
 import { extname, resolve } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 
 interface UploadImageResult extends ActionResult {
   url: string;
@@ -16,13 +12,16 @@ interface UploadImageResult extends ActionResult {
 export async function uploadImageAction(
   formData: FormData,
 ): Promise<UploadImageResult> {
-  //TODO: Verificar login do usuário
-
   const makeResult = ({ url = '', error = '', successMessage = '' }) => ({
     url,
     error,
     successMessage,
   });
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    return makeResult({ error: 'Faça login em outra aba para continuar' });
+  }
 
   if (!(formData instanceof FormData)) {
     return makeResult({ error: 'Dados inválidos' });
@@ -31,7 +30,9 @@ export async function uploadImageAction(
   if (!(file instanceof File)) {
     return makeResult({ error: 'Arquivo inválido' });
   }
-  if (file.size > MAX_IMAGE_SIZE) {
+  const uploadMaxSize =
+    Number(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE) || 1048576;
+  if (file.size > uploadMaxSize) {
     return makeResult({ error: 'Arquivo muito grande' });
   }
   if (!file.type.startsWith('image/')) {
@@ -40,18 +41,19 @@ export async function uploadImageAction(
 
   const imageExtension = extname(file.name);
   const uniqueImageName = `${Date.now()}${imageExtension}`;
-  const uploadFullPath = resolve(
-    process.cwd(),
-    'public',
-    IMAGE_UPLOAD_DIRECTORY,
-  );
+
+  const uploadDir = process.env.IMAGE_UPLOAD_DIRECTORY || 'uploads';
+  const uploadFullPath = resolve(process.cwd(), 'public', uploadDir);
   await mkdir(uploadFullPath, { recursive: true });
+
   const fileArrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(fileArrayBuffer);
   const fileFullPath = resolve(uploadFullPath, uniqueImageName);
   await writeFile(fileFullPath, buffer);
 
-  const url = `${IMAGE_SERVER_URL}/${uniqueImageName}`;
+  const imageServerUrl =
+    process.env.IMAGE_SERVER_URL || 'http://localhost:3000/uploads';
+  const url = `${imageServerUrl}/${uniqueImageName}`;
 
   return makeResult({ url: url, successMessage: 'Imagem enviada' });
 }

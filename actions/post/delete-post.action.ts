@@ -1,13 +1,21 @@
 'use server';
 
 import { ActionResult } from '@/dto/post/action-result.dto';
+import { verifyLoginSession } from '@/lib/login/manage-login';
 import { PostModel } from '@/models/post.model';
 import { drizzlePostRepository } from '@/repositories/post/drizzle-post.repository';
 import { revalidateTag } from 'next/cache';
 
 export async function deletePostAction(id: string): Promise<ActionResult> {
-  //TODO: check user login before deletion
-  //TODO: implement post deletion
+  const isAuthenticated = await verifyLoginSession();
+
+  if (!isAuthenticated) {
+    return {
+      error: 'Faça login novamente',
+      successMessage: '',
+    };
+  }
+
   if (!id || typeof id !== 'string') {
     return {
       error: '[ERR-005]: Por favor, contate o suporte',
